@@ -1,0 +1,97 @@
+@import "../../../public/assets/styles/_variables/colors";
+@import "../../../public/assets/styles/_variables/breakpoints";
+@import "../../../public/assets/styles/_variables/sizes";
+
+.home {
+  .inc{
+    display: flex;
+    flex-direction: row;
+
+    .increase {
+      margin-top: 100px;
+      margin-left: 100px;
+      font-size: 100px;
+      user-select: none;
+      transition: all 0.3s ease-out;
+      &:hover {
+        cursor: pointer;
+        color: $gold-light;
+      }
+    }
+  }
+  .animated-wrapper {
+    max-height: 100%;
+    opacity: 1;
+    transition: all 0.3s ease-out;
+    visibility: visible;
+
+    &.is-animated {
+      max-height: 0;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+
+      span {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid $main-light;
+        transition: all 0.4s ease-in;
+
+        &.active {
+          width: 1.2rem;
+          height: 1.2rem;
+          background: radial-gradient($main-light, $black);
+          border: 1px solid $main-light;
+          transform: translate(-0.1rem, -0.1rem);
+          transition: all 0.4s ease-in;
+          box-shadow: 0 0 5px 5px transparentize($main-light, 0.85);
+        }
+
+        &:not(:last-child) {
+          margin-right: 2rem;
+        }
+      }
+    }
+  }
+
+  section {
+    &.wrapper {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 1.4rem;
+      margin-bottom: 6rem;
+
+      @media all and (max-width: $mobile-large) {
+        scroll-snap-type: x mandatory;
+        overflow-x: auto;
+        position: relative;
+        width: 100vw;
+        left: -2.5rem;
+        flex-wrap: nowrap;
+        margin-bottom: 0;
+
+        &::-webkit-scrollbar {
+          display: none;
+          height: 0;
+          width: 0;
+          background: transparent;
+          -webkit-appearance: none;
+        }
+      }
+    }
+  }
+
+  @media all and (max-width: $desktop-small) {
+    .animated-wrapper {
+      max-height: none;
+    }
+  }
+}
