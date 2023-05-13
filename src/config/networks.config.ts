@@ -33,6 +33,9 @@ export interface Network {
   blockExplorerUrls: string[];
   active: boolean;
   contractAddress?: string;
+  contractFactoryAddress?: string,
+  contractLensAddress?: string,
+  contractAavePoolAddress?: string,
   nativeCurrency?: NativeCoin;
   supportedStableCoinsDol?: Coin[];
   supportedCoins?: Coin[];
@@ -182,6 +185,9 @@ export const networks: Network[] = [
     chainId: 137,
     active: chainIds.indexOf(137) > 0,
     contractAddress: "0x0",
+    contractFactoryAddress: '0x648cE75895873BECBC4c9a291A28CA1EF121953B',
+    contractLensAddress: '0xAe3C2d45270791Ef8aD023D1E66d275255db0499',
+    contractAavePoolAddress: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',
     blockExplorerUrls: [""],
     supportedStableCoinsDol: [
       {
