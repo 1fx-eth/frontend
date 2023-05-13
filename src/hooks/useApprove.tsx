@@ -5,18 +5,23 @@ import { useCallback } from "react";
 import { useTxWaitModal } from "../components/modal/modals/tx-wait/tx-wait.modal";
 
 import { extractRevertReason, JsonRpcError } from "../utils/blockchain";
-import { approve } from "../contracts/erc20.contract";
+import { approve, getAllowance } from "../contracts/erc20.contract";
 import { useUserPositions } from "./useUserPositions";
 
-interface UseStake {
+interface UseApprove {
   approveTokenTo: (
     amount: number,
     spenderAddress: string,
     tokenAddress: string
   ) => void;
+  getAmountApprovedFor: (
+    userAddress: string,
+    spenderAddress: string,
+    tokenAddress: string
+  ) => Promise<number>;
 }
 
-export const useApprove = (): UseStake => {
+export const useApprove = (): UseApprove => {
   const { library, account } = useWeb3React<JsonRpcProvider>();
   const txAwaitModal = useTxWaitModal();
   const { refresh } = useUserPositions();
@@ -29,6 +34,14 @@ export const useApprove = (): UseStake => {
     if (library) {
       txAwait(approve(amount, spenderAddress, tokenAddress, library));
     }
+  };
+
+  const getAmountApprovedFor = (
+    userAddress: string,
+    spenderAddress: string,
+    tokenAddress: string
+  ): Promise<number> => {
+    return getAllowance(userAddress, spenderAddress, tokenAddress);
   };
 
   const txAwait = useCallback(
@@ -50,5 +63,5 @@ export const useApprove = (): UseStake => {
     [txAwaitModal, refresh]
   );
 
-  return { approveTokenTo };
+  return { approveTokenTo, getAmountApprovedFor };
 };

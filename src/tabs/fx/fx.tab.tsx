@@ -18,6 +18,9 @@ import { SelectPairComponent } from "../../components/select-pair/SelectPair.com
 import Slider from "../../components/slider/Slider.component";
 import { useUserPositions } from "../../hooks/useUserPositions";
 import { PositionTable } from "../../components/position-table/positionTable.component";
+import { useApprove } from "../../hooks/useApprove";
+import { JsonRpcProvider } from "@ethersproject/providers";
+import { useWeb3React } from "@web3-react/core";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -29,7 +32,9 @@ export const FxTab: React.FC = () => {
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
   const [deposit, setDeposit] = useState("0");
-  const [viewBalance, setViewBalance] = useState(0);
+  const [amountApproved, setAmountApproved] = useState(0);
+  const { account } = useWeb3React<JsonRpcProvider>();
+  const { approveTokenTo, getAmountApprovedFor } = useApprove();
 
   useEffect(() => {
     if (selectedPair) {
@@ -39,6 +44,12 @@ export const FxTab: React.FC = () => {
       }
     }
   }, [selectedPair]);
+
+  // useEffect(() => {
+  //   if (selectedToken && account && selectedToken && tokens[selectedToken]) {
+  //     await getAmountApprovedFor(account, "", tokens[selectedToken].value);
+  //   }
+  // }, [account, selectedToken, getAmountApprovedFor]);
 
   const onTokenChange = (option: number): void => {
     setSelectedToken(option);
@@ -89,7 +100,34 @@ export const FxTab: React.FC = () => {
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
   };
+
+  const onActionButtonClickedApprove = (): void => {
+    console.log("onActionButtonClicked");
+  };
+
   const positions = useUserPositions();
+
+  const renderButton = (): React.ReactNode => {
+    if (approve) {
+      return (
+        <div
+          className={styles["action"]}
+          onClick={onActionButtonClickedApprove}
+          onKeyDown={onActionButtonClickedApprove}>
+          Approve {tokens[selectedToken]?.label}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className={styles["action"]}
+        onClick={onActionButtonClicked}
+        onKeyDown={onActionButtonClicked}>
+        Buy / Long {tokens[selectedToken]?.label}
+      </div>
+    );
+  };
 
   return (
     <div className={styles["fx"]}>
@@ -231,12 +269,7 @@ export const FxTab: React.FC = () => {
             />
           </div>
         </div>
-        <div
-          className={styles["action"]}
-          onClick={onActionButtonClicked}
-          onKeyDown={onActionButtonClicked}>
-          Buy / Long {tokens[selectedToken]?.label}
-        </div>
+        {renderButton()}
       </div>
     </div>
   );
