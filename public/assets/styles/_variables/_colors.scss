@@ -37,6 +37,18 @@ $lilac: #eee9dc;
 $white: #fff;
 
 //Gradients
+$gradient-button: linear-gradient(
+  180deg,
+  rgb(24, 168, 81) 0%,
+  rgb(23, 147, 66, 0.8) 50%,
+  rgba(20, 158, 68, 0.25) 100%
+);
+$gradient-button-hover: linear-gradient(
+  180deg,
+  rgb(30, 209, 101) 0%,
+  rgba(29, 194, 87, 0.8) 50%,
+  rgba(23, 185, 80, 0.25) 100%
+);
 $gradient-1: linear-gradient(
   0deg,
   rgba(30, 89, 54, 0.33) 0%,

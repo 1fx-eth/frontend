@@ -1,3 +1,5 @@
+@import "../../../public/assets/styles/_variables/colors";
+
 .fx {
   width: 100%;
   display: flex;
@@ -157,7 +159,6 @@
           color: #00bc06;
         }
       }
-
       .long-right {
         display: flex;
         flex-direction: row;
@@ -172,7 +173,6 @@
     .leverage {
       display: flex;
       flex-direction: row;
-
       .leverage-input {
         background-color: #000;
         margin-left: 8px;
@@ -193,6 +193,20 @@
         display: flex;
         align-items: center;
         width: calc(100% - 72px);
+      }
+    }
+    .action {
+      text-align: center;
+      margin-top: 24px;
+      background: $gradient-button;
+      margin-left: 8px;
+      margin-right: 8px;
+      border-radius: 16px;
+      padding: 24px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      &:hover {
+        background: $gradient-button-hover;
       }
     }
   }

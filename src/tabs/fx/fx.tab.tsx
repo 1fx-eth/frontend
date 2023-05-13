@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable max-len */
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
@@ -22,6 +23,9 @@ export const FxTab: React.FC = () => {
   );
   const [selectedToken, setSelectedToken] = useState<number>(0);
   const [selectedPair, setSelectedPair] = useState<number>(0);
+  const [selectedTVPair, setSelectedTVPair] = useState<string>(
+    "UNISWAP3ETH:AGEURUSDC"
+  );
   const [long, setLong] = useState(0);
   const [leverage, setLeverage] = useState(0);
   const [maxLeverage, setMaxLeverage] = useState(10);
@@ -29,10 +33,17 @@ export const FxTab: React.FC = () => {
   const [balances, setBalances] = useState<number[]>([]);
   const [collateral, setCollateral] = useState(0);
   const [viewBalance, setViewBalance] = useState(0);
-  const [coin, setCoin] = useState<Coin>(
-    networks.find((network) => network.name === "Ethereum")
-      ?.nativeCurrency as Coin
-  );
+
+  useEffect(() => {
+    if (selectedPair) {
+      const pair = supportedPairs[selectedPair];
+      if (pair) {
+        setSelectedTVPair(
+          `${pair.coinCollateral.symbol}${pair.coinBorrow.symbol}`
+        );
+      }
+    }
+  }, [selectedPair]);
 
   const [allowedCollateralTokens, setAllowedCollateralTokens] = useState<
     Coin[]
@@ -104,12 +115,16 @@ export const FxTab: React.FC = () => {
     setLeverage(leverage);
   };
 
+  const onActionButtonClicked = (): void => {
+    console.log("onActionButtonClicked");
+  };
+
   return (
     <div className={styles["fx"]}>
       <div className={styles["left"]}>
         <div className={styles["tradingview"]}>
           <TradingViewWidget
-            symbol="UNISWAP3ETH:AGEURUSDC"
+            symbol={selectedTVPair}
             theme={"DARK"}
             locale="us"
             autosize={true}
@@ -234,6 +249,12 @@ export const FxTab: React.FC = () => {
               onChange={(value): void => onLeverageChange(value)}
             />
           </div>
+        </div>
+        <div
+          className={styles["action"]}
+          onClick={onActionButtonClicked}
+          onKeyDown={onActionButtonClicked}>
+          Buy / Long {tokens[selectedToken]?.label}
         </div>
       </div>
     </div>

@@ -5,10 +5,11 @@
   background-color: #000;
   border: 0;
   border-radius: 3.2rem;
-  color: transparentize($white, 0.3);
+  color: transparentize($white, 0.1);
   font-family: Circular-Book, sans-serif;
   font-size: 1.1rem;
   position: relative;
+  z-index: 11;
 
   &.open {
     border-radius: 3rem;
@@ -52,8 +53,8 @@
     background: transparent
       linear-gradient(
         244deg,
-        rgba(3, 70, 44, 0.63) -20%,
-        rgba(0, 131, 74, 0.43) 120%
+        rgba(2, 49, 31, 0.703) -20%,
+        rgba(5, 100, 59, 0.712) 120%
       );
     -webkit-backdrop-filter: blur(3px);
     backdrop-filter: blur(9px);

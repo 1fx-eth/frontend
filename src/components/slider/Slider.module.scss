@@ -7,6 +7,8 @@
 }
 
 .customSlider {
+  width: calc(100% - 16px);
+
   height: 2rem;
   &.disabled {
     filter: opacity(0.3);
@@ -48,6 +50,7 @@
   height: 10px;
   border-radius: 100%;
   outline: none;
+  z-index: 2;
   @media all and (max-width: $mobile-large) {
     margin-top: 3px;
     width: 15px;
