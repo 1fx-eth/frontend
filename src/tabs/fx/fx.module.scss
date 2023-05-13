@@ -23,10 +23,12 @@
     color: #d1d4dc;
     background-color: #131722;
     border: 0.1px solid transparentize(#d9dadb, 0.75);
+    font-size: 1.2rem;
     .buysell {
       display: flex;
       flex-direction: row;
       height: 40px;
+      font-size: 1.6rem;
       .buy {
         text-align: center;
         padding: 8px;
@@ -86,7 +88,7 @@
       .collateral-left {
         display: flex;
         flex-direction: row;
-        width: 70%;
+        width: 60%;
         input {
           background-color: transparent;
           border: solid 0.1rem transparent;
@@ -105,6 +107,7 @@
           padding: 6px 8px;
           border: 0;
           margin-right: 20px;
+          font-size: 1.1rem;
           &:hover {
             cursor: pointer;
             color: #00bc06;
@@ -114,80 +117,52 @@
       .collateral-right {
         display: flex;
         flex-direction: row;
-        width: 30%;
-        align-content: right;
+        width: 40%;
+        justify-content: flex-end;
       }
     }
-    .frame-overlap {
-      background-color: #0c0f12;
-      border: 1px solid;
-      border-color: #242b33;
+    .long-label {
+      padding: 8px 16px;
+      margin-top: 16px;
+    }
+    .long {
+      display: flex;
+      flex-direction: row;
+      background-color: #000;
+      margin-left: 8px;
+      margin-right: 8px;
       border-radius: 8px;
-      height: 44px;
-      left: 12px;
-      position: absolute;
-      top: 91px;
-      width: 276px;
-      .frame-text-wrapper-8 {
-        color: #ffffff;
-        font-family: "Outfit", Helvetica;
-        font-size: 16px;
-        font-weight: 600;
-        left: 9px;
-        letter-spacing: 0;
-        line-height: 18px;
-        position: absolute;
-        top: 11px;
-        white-space: nowrap;
+      padding: 8px;
+      input {
+        background-color: transparent;
+        border: solid 0.1rem transparent;
+        outline: 0;
+        border: 0;
+        color: #fff;
+        padding: 4px;
+        width: calc(100% - 40px);
+      }
+      .max {
+        width: 40px;
+        background-color: #2a2b2e;
+        border-radius: 8px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 6px 8px;
+        border: 0;
+        margin-right: 20px;
+        font-size: 1.1rem;
+        &:hover {
+          cursor: pointer;
+          color: #00bc06;
+        }
       }
 
-      .frame-network-buttons {
-        align-items: center;
-        background-color: #242b33;
-        border-radius: 5px;
+      .long-right {
         display: flex;
-        gap: 4px;
+        flex-direction: row;
+        width: 20%;
         justify-content: flex-end;
-        left: 189px;
-        padding: 4px;
-        position: absolute;
-        top: 9px;
-        width: fit-content;
-
-        .frame-div {
-          color: #ffffff;
-          font-family: "Outfit", Helvetica;
-          font-size: 12px;
-          font-weight: 500;
-          letter-spacing: 0;
-          line-height: 16px;
-          position: relative;
-          white-space: nowrap;
-          width: fit-content;
-        }
-      }
-      .frame-buttons-2 {
-        align-items: center;
-        background-color: #242b33;
-        border-radius: 4px;
-        display: flex;
-        gap: 4px;
-        left: 149px;
-        padding: 4px;
-        position: absolute;
-        top: 9px;
-        width: fit-content;
-        .frame-div {
-          color: #ffffff;
-          font-family: "Outfit", Helvetica;
-          font-size: 12px;
-          font-weight: 500;
-          letter-spacing: 0;
-          line-height: 16px;
-          position: relative;
-          white-space: nowrap;
-          width: fit-content;
-        }
       }
     }
   }

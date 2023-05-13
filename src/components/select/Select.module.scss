@@ -2,12 +2,12 @@
 @import "../../../public/assets/styles/_variables/breakpoints";
 
 .select-wrapper {
-  background-color: $arapawa-2;
-  border: 0.1rem solid rgba($saffron, 0.4);
+  background-color: #000;
+  border: 0;
   border-radius: 3.2rem;
   color: transparentize($white, 0.3);
   font-family: Circular-Book, sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   position: relative;
 
   &.open {
@@ -17,7 +17,7 @@
   .select-value-container {
     align-items: center;
     height: 100%;
-    padding: 1rem 1.4rem;
+    padding: 0.5rem 1.2rem;
 
     .select-value {
       cursor: pointer;
@@ -26,7 +26,7 @@
       align-items: center;
 
       &:focus {
-        @media all and (max-width: $medium) {
+        @media all and (max-width: $mobile-large) {
           outline: none;
         }
       }

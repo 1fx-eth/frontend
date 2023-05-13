@@ -12,13 +12,16 @@ import {
 } from "../../config/networks.config";
 import { SelectComponent } from "../../components/select/Select.component";
 import { SpinnerComponent } from "../../components/spinner/Spinner.component";
+import selectStyles from "../../components/select/Select.module.scss";
 
 export const FxTab: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>(
     formatNumbersWithDotDelimiter(0)
   );
   const [selectedToken, setSelectedToken] = useState<number>(0);
+  const [long, setLong] = useState(0);
   const [balance, setBalance] = useState(0);
+  const [balances, setBalances] = useState<number[]>([]);
   const [collateral, setCollateral] = useState(0);
   const [viewBalance, setViewBalance] = useState(0);
   const [coin, setCoin] = useState<Coin>(
@@ -117,12 +120,10 @@ export const FxTab: React.FC = () => {
                     {option.label || option.value}
                   </span>
                   <span className={styles["option-amount"]}>
-                    {balances?.[option.value]?.loading && (
-                      <SpinnerComponent size="small" />
-                    )}
-                    {!balances?.[option.value]?.loading &&
+                    {balances[0] && <SpinnerComponent size="small" />}
+                    {balances[0] &&
                       formatNumbersWithDotDelimiter(
-                        round(balances?.[option.value]?.amount || 0)
+                        0 //round(balances?.[option.value]?.amount || 0)
                       )}
                   </span>
                 </>
@@ -130,40 +131,43 @@ export const FxTab: React.FC = () => {
             />
           </div>
         </div>
-        <div className={styles["frame-overlap"]}>
-          <div className={styles["frame-text-wrapper-8"]}>1,000.00</div>
-          <div className={styles["frame-network-buttons"]}>
-            <CoinIcon
-              elementCoinIcon="../../../public/assets/images/svg/usdc-icon-1.png"
-              style={{
-                height: "16px",
-                left: "unset",
-                minWidth: "16px",
-                position: "relative",
-                top: "unset",
-                width: "unset",
-              }}
-            />
-            <div className={styles["frame-div"]}>USDC</div>
-            <ArrowDropDown
-              style="Outlined"
-              styleFilled="/img/arrow-drop-down.svg"
-              styleOverride={{
-                height: "12px",
-                left: "unset",
-                minWidth: "12px",
-                position: "relative",
-                top: "unset",
-                width: "unset",
-              }}
-            />
-          </div>
-          <div className={styles["frame-buttons-2"]}>
-            <div className={styles["frame-div"]}>MAX</div>
-          </div>
+
+        <div className={styles["long-label"]}>Long: ${long}</div>
+        <div className={styles["long"]}>
+          <input
+            onChange={onAmountChange}
+            type="string"
+            value={inputValue}
+            className={styles["long-left"]}
+            disabled={false}
+          />
+          <SelectComponent
+            options={tokens}
+            onOptionChange={onTokenChange}
+            selectedValue={selectedToken}
+            renderOption={(option): ReactNode => (
+              <>
+                {option.icon && (
+                  <img
+                    className={selectStyles["select-option-icon"]}
+                    src={option.icon}
+                    alt={option.label || option.value}
+                  />
+                )}
+                <span className={selectStyles["select-option-label"]}>
+                  {option.label || option.value}
+                </span>
+                <span className={styles["option-amount"]}>
+                  {balances[0] && <SpinnerComponent size="small" />}
+                  {balances[0] &&
+                    formatNumbersWithDotDelimiter(
+                      0 //round(balances?.[option.value]?.amount || 0)
+                    )}
+                </span>
+              </>
+            )}
+          />
         </div>
-        {/* <div className={styles["leverage-title"]}>Leverage</div>
-        <div className={styles["leverage-value"]}>0.00x</div> */}
       </div>
     </div>
   );
