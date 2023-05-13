@@ -1,1 +1,0 @@
-export { CoinIcon } from "./ElementCoinIcon";

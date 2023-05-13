@@ -92,7 +92,6 @@
         width: 60%;
         input {
           background-color: transparent;
-          border: solid 0.1rem transparent;
           outline: 0;
           border: 0;
           color: #fff;
@@ -164,6 +163,36 @@
         flex-direction: row;
         width: 20%;
         justify-content: flex-end;
+      }
+    }
+    .leverage-label {
+      padding: 8px 16px;
+      margin-top: 16px;
+    }
+    .leverage {
+      display: flex;
+      flex-direction: row;
+
+      .leverage-input {
+        background-color: #000;
+        margin-left: 8px;
+        margin-right: 8px;
+        border-radius: 8px;
+        padding: 8px;
+        width: 48px;
+        input {
+          background-color: #000;
+          outline: 0;
+          border: 0;
+          color: #fff;
+          padding: 4px;
+          width: 100%;
+        }
+      }
+      .leverage-slider {
+        display: flex;
+        align-items: center;
+        width: calc(100% - 72px);
       }
     }
   }

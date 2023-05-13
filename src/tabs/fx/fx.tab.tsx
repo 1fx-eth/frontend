@@ -2,8 +2,6 @@
 import React, { ReactNode, useMemo, useState } from "react";
 import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
-import { CoinIcon } from "../../elements/CoinIcon";
-import { ArrowDropDown } from "../../elements/ArrowDropDown";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
 import {
   Coin,
@@ -16,6 +14,7 @@ import { SpinnerComponent } from "../../components/spinner/Spinner.component";
 import selectStyles from "../../components/select/Select.module.scss";
 import selectPairStyles from "../../components/select-pair/SelectPair.module.scss";
 import { SelectPairComponent } from "../../components/select-pair/SelectPair.component";
+import Slider from "../../components/slider/Slider.component";
 
 export const FxTab: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>(
@@ -24,6 +23,8 @@ export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
   const [selectedPair, setSelectedPair] = useState<number>(0);
   const [long, setLong] = useState(0);
+  const [leverage, setLeverage] = useState(0);
+  const [maxLeverage, setMaxLeverage] = useState(10);
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
   const [collateral, setCollateral] = useState(0);
@@ -81,6 +82,26 @@ export const FxTab: React.FC = () => {
     }
     const value = parseInt(amount.replace(/,/g, ""));
     setCollateral(value);
+  };
+
+  const onLeverageValueChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    let amount = event.target.value;
+    const max = 0;
+    const tot = 0;
+    if (parseFloat(amount.replace(/,/g, "")) > viewBalance - 1) {
+      amount = Math.ceil(Math.max(viewBalance - 1, 0)).toString();
+    }
+    if (max && tot && parseFloat(amount.replace(/,/g, "")) > max - tot) {
+      amount = Math.max(max - tot, 0).toString();
+    }
+    const value = parseInt(amount.replace(/,/g, ""));
+    setCollateral(value);
+  };
+
+  const onLeverageChange = (leverage: number): void => {
+    setLeverage(leverage);
   };
 
   return (
@@ -158,7 +179,7 @@ export const FxTab: React.FC = () => {
           <input
             onChange={onAmountChange}
             type="string"
-            value={inputValue}
+            value={long}
             className={styles["long-left"]}
             disabled={false}
           />
@@ -195,6 +216,24 @@ export const FxTab: React.FC = () => {
               </>
             )}
           />
+        </div>
+        <div className={styles["leverage-label"]}>Leverage:</div>
+        <div className={styles["leverage"]}>
+          <div className={styles["leverage-input"]}>
+            <input
+              onChange={onLeverageValueChange}
+              type="string"
+              value={leverage}
+              disabled={false}
+            />
+          </div>
+          <div className={styles["leverage-slider"]}>
+            <Slider
+              max={maxLeverage}
+              currentValue={leverage}
+              onChange={(value): void => onLeverageChange(value)}
+            />
+          </div>
         </div>
       </div>
     </div>
