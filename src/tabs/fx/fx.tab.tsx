@@ -20,20 +20,15 @@ import { useUserPositions } from "../../hooks/useUserPositions";
 import { PositionTable } from "../../components/position-table/positionTable.component";
 
 export const FxTab: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>(
-    formatNumbersWithDotDelimiter(0)
-  );
   const [selectedToken, setSelectedToken] = useState<number>(0);
   const [selectedPair, setSelectedPair] = useState<number>(0);
-  const [selectedTVPair, setSelectedTVPair] = useState<string>(
-    "UNISWAP3ETH:AGEURUSDC"
-  );
+  const [selectedTVPair, setSelectedTVPair] = useState<string>("USDCUSDT");
   const [long, setLong] = useState(0);
   const [leverage, setLeverage] = useState(0);
   const [maxLeverage, setMaxLeverage] = useState(10);
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
-  const [collateral, setCollateral] = useState(0);
+  const [deposit, setDeposit] = useState("0");
   const [viewBalance, setViewBalance] = useState(0);
 
   useEffect(() => {
@@ -78,44 +73,23 @@ export const FxTab: React.FC = () => {
     []
   );
 
-  const onAmountChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    let amount = event.target.value;
-    const max = 0;
-    const tot = 0;
-    if (parseFloat(amount.replace(/,/g, "")) > viewBalance - 1) {
-      amount = Math.ceil(Math.max(viewBalance - 1, 0)).toString();
-    }
-    if (max && tot && parseFloat(amount.replace(/,/g, "")) > max - tot) {
-      amount = Math.max(max - tot, 0).toString();
-    }
-    const value = parseInt(amount.replace(/,/g, ""));
-    setCollateral(value);
-  };
-
-  const onLeverageValueChange = (
+  const onDepositChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    let amount = event.target.value;
-    const max = 0;
-    const tot = 0;
-    if (parseFloat(amount.replace(/,/g, "")) > viewBalance - 1) {
-      amount = Math.ceil(Math.max(viewBalance - 1, 0)).toString();
-    }
-    if (max && tot && parseFloat(amount.replace(/,/g, "")) > max - tot) {
-      amount = Math.max(max - tot, 0).toString();
-    }
-    const value = parseInt(amount.replace(/,/g, ""));
-    setCollateral(value);
+    const amount = event.target.value;
+    setDeposit(amount);
+    setLong(Number(amount) * leverage);
   };
 
   const onLeverageChange = (leverage: number): void => {
+    setLong(Number(deposit) * leverage);
     setLeverage(leverage);
   };
 
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
   };
-  const positions = useUserPositions()
+  const positions = useUserPositions();
 
   return (
     <div className={styles["fx"]}>
@@ -144,17 +118,26 @@ export const FxTab: React.FC = () => {
         </div>
         <div className={styles["collateral-balance"]}>
           <div className={styles["collateral-amount"]}>
-            Collateral: {collateral}{" "}
+            Pay: ${(Number(deposit) * 0.9998).toLocaleString()}
           </div>
           <div className={styles["balance"]}>Balance: {balance}</div>
         </div>
         <div className={styles["collateral"]}>
           <div className={styles["collateral-left"]}>
             <input
-              onChange={onAmountChange}
-              type="string"
-              value={inputValue}
+              onChange={onDepositChange}
+              type="text"
+              value={deposit}
               disabled={false}
+              inputMode="decimal"
+              autoComplete="off"
+              autoCorrect="off"
+              // text-specific options
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              placeholder={"0.0"}
+              minLength={1}
+              maxLength={79}
+              spellCheck="false"
             />
             <div className={styles["max"]}>MAX</div>
           </div>
@@ -191,7 +174,6 @@ export const FxTab: React.FC = () => {
         <div className={styles["long-label"]}>Long: ${long}</div>
         <div className={styles["long"]}>
           <input
-            onChange={onAmountChange}
             type="string"
             value={long}
             className={styles["long-left"]}
@@ -235,7 +217,7 @@ export const FxTab: React.FC = () => {
         <div className={styles["leverage"]}>
           <div className={styles["leverage-input"]}>
             <input
-              onChange={onLeverageValueChange}
+              // onChange={onLeverageValueChange}
               type="string"
               value={leverage}
               disabled={false}

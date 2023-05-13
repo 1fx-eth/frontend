@@ -517,6 +517,12 @@ interface Pair {
 
 export const supportedPairs: Pair[] = [
   {
+    pairName: "USDC:GHST",
+    tvPairName: "USDC:GHO",
+    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
+  },
+  {
     pairName: "AGEUR:USDC",
     tvPairName: "UNISWAP3ETH:AGEURUSDC",
     coinCollateral: supportedStableCoinsEur.find((c) => c.symbol === "AGEUR")!,
@@ -528,12 +534,7 @@ export const supportedPairs: Pair[] = [
     coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
     coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
   },
-  {
-    pairName: "USDC:GHST",
-    tvPairName: "USDCUSDT",
-    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
-    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
-  },
+
   {
     pairName: "USDT:GHST",
     tvPairName: "USDCUSDT",
@@ -542,4 +543,8 @@ export const supportedPairs: Pair[] = [
   },
 ];
 
-export const ALL_COINS = [...supportedCoins, ...supportedStableCoinsDol, ...supportedStableCoinsEur]
+export const ALL_COINS = [
+  ...supportedCoins,
+  ...supportedStableCoinsDol,
+  ...supportedStableCoinsEur,
+];
