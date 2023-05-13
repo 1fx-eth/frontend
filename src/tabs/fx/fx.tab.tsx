@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable max-len */
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
@@ -5,6 +6,7 @@ import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
 import {
+  addressesAaveATokens,
   Coin,
   networks,
   supportedPairs,
@@ -21,6 +23,8 @@ import { PositionTable } from "../../components/position-table/positionTable.com
 import { useApprove } from "../../hooks/useApprove";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
+import use1inchApi from "../../hooks/use1inch";
+import { parseUnits } from "@ethersproject/units";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -35,6 +39,28 @@ export const FxTab: React.FC = () => {
   const [amountApproved, setAmountApproved] = useState(0);
   const { account } = useWeb3React<JsonRpcProvider>();
   const { approveTokenTo, getAmountApprovedFor } = useApprove();
+  const { userPositions, getNextAddress } = useUserPositions();
+  const { data, setInput } = use1inchApi();
+  const [projectedAddress, setProjectedAddress] = useState("");
+  const [
+    collateralAddress,
+    debtAddress,
+    aaveCollateralAddress,
+    aaveDebtAddress,
+    debtDecimals,
+  ] = useMemo(() => {
+    return [
+      supportedPairs[selectedPair]?.coinCollateral.address ?? "",
+      supportedPairs[selectedPair]?.coinBorrow.address ?? "",
+      addressesAaveATokens[
+        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+      ]?.[137] ?? "",
+      addressesAaveATokens[
+        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+      ]?.[137] ?? "",
+      supportedPairs[selectedPair]?.coinBorrow.decimals,
+    ];
+  }, [selectedPair]);
 
   useEffect(() => {
     if (selectedPair) {
@@ -45,19 +71,30 @@ export const FxTab: React.FC = () => {
     }
   }, [selectedPair]);
 
+  useEffect(() => {
+    setInput({
+      collateralAddress,
+      debtAddress,
+      swapAmount: parseUnits(String(long), debtDecimals).toString(),
+      projectedAddress,
+    });
+  }, [
+    selectedPair,
+    long,
+    projectedAddress,
+    collateralAddress,
+    debtAddress,
+    debtDecimals,
+    setInput,
+  ]);
+
   // useEffect(() => {
   //   if (selectedToken && account && selectedToken && tokens[selectedToken]) {
   //     await getAmountApprovedFor(account, "", tokens[selectedToken].value);
   //   }
   // }, [account, selectedToken, getAmountApprovedFor]);
 
-  const onTokenChange = (option: number): void => {
-    setSelectedToken(option);
-  };
-
-  const onPairChange = (option: number): void => {
-    setSelectedPair(option);
-  };
+  getNextAddress().then((address) => setProjectedAddress(address));
 
   const tokens = useMemo(
     () =>
@@ -92,6 +129,14 @@ export const FxTab: React.FC = () => {
     setLong(Number(amount) * leverage);
   };
 
+  const onTokenChange = (option: number): void => {
+    setSelectedToken(option);
+  };
+
+  const onPairChange = (option: number): void => {
+    setSelectedPair(option);
+  };
+
   const onLeverageChange = (leverage: number): void => {
     setLong(Number(deposit) * leverage);
     setLeverage(leverage);
@@ -105,9 +150,8 @@ export const FxTab: React.FC = () => {
     console.log("onActionButtonClicked");
   };
 
-  const positions = useUserPositions();
-
   const renderButton = (): React.ReactNode => {
+    const approve = true;
     if (approve) {
       return (
         <div
@@ -146,7 +190,7 @@ export const FxTab: React.FC = () => {
         <div className={styles["orders"]}>
           <h1>Orders</h1>
           <p>These are your active and historic orders</p>
-          <PositionTable slots={positions.userPositions} />
+          <PositionTable slots={userPositions} />
         </div>
       </div>
       <div className={styles["right"]}>
