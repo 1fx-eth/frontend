@@ -16,6 +16,8 @@ import selectStyles from "../../components/select/Select.module.scss";
 import selectPairStyles from "../../components/select-pair/SelectPair.module.scss";
 import { SelectPairComponent } from "../../components/select-pair/SelectPair.component";
 import Slider from "../../components/slider/Slider.component";
+import { useUserPositions } from "../../hooks/useUserPositions";
+import { PositionTable } from "../../components/position-table/positionTable.component";
 
 export const FxTab: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>(
@@ -113,6 +115,7 @@ export const FxTab: React.FC = () => {
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
   };
+  const positions = useUserPositions()
 
   return (
     <div className={styles["fx"]}>
@@ -131,6 +134,7 @@ export const FxTab: React.FC = () => {
         <div className={styles["orders"]}>
           <h1>Orders</h1>
           <p>These are your active and historic orders</p>
+          <PositionTable slots={positions.userPositions} />
         </div>
       </div>
       <div className={styles["right"]}>
