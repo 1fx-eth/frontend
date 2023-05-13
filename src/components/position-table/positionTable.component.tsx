@@ -68,7 +68,7 @@ const PositionRow = ({ slot }: RowProps) => {
 const PositinHeader = () => {
 
 
-    return <tr>
+    return <thead>
         <td>
             Pair
         </td>
@@ -79,6 +79,6 @@ const PositinHeader = () => {
             Position Sizes
         </td>
 
-    </tr>
+    </thead>
 
 }

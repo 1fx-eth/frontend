@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable max-len */
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
@@ -25,13 +25,15 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import use1inchApi from "../../hooks/use1inch";
 import { parseUnits } from "@ethersproject/units";
+import { useOpenPosition } from "../../hooks/useOpenPosition";
+import { BigNumber } from "ethers";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
   const [selectedPair, setSelectedPair] = useState<number>(0);
   const [selectedTVPair, setSelectedTVPair] = useState<string>("USDCUSDT");
   const [long, setLong] = useState(0);
-  const [leverage, setLeverage] = useState(0);
+  const [leverage, setLeverage] = useState(1);
   const [maxLeverage, setMaxLeverage] = useState(10);
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
@@ -47,17 +49,19 @@ export const FxTab: React.FC = () => {
     debtAddress,
     aaveCollateralAddress,
     aaveDebtAddress,
+    collateralDecimals,
     debtDecimals,
   ] = useMemo(() => {
     return [
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
+      supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
     ];
   }, [selectedPair]);
@@ -72,10 +76,16 @@ export const FxTab: React.FC = () => {
   }, [selectedPair]);
 
   useEffect(() => {
+    let swapAmount = '0'
+    try {
+      swapAmount = parseUnits(String(long), debtDecimals).toString()
+    } catch (e) {
+      console.log(e)
+    }
     setInput({
       collateralAddress,
       debtAddress,
-      swapAmount: parseUnits(String(long), debtDecimals).toString(),
+      swapAmount,
       projectedAddress,
     });
   }, [
@@ -88,6 +98,52 @@ export const FxTab: React.FC = () => {
     setInput,
   ]);
 
+  const { openPosition } = useOpenPosition()
+
+  const onOpenPosition = useCallback(() => {
+
+    let depositAmount = '0'
+    try {
+      depositAmount = parseUnits(String(deposit), collateralDecimals).toString()
+    } catch (e) {
+      console.log("depositAmount", e)
+    }
+
+    let targetAmount = '0'
+    try {
+      targetAmount = BigNumber.from(data.toTokenAmount).mul(99).div(100).toString()
+    } catch (e) {
+      console.log("targetAmount", e)
+    }
+
+    const borrowAmount = data?.fromTokenAmount ?? '0'
+
+
+    let calldata = '0x'
+
+    try {
+      calldata = data?.tx?.data
+    } catch (e) {
+      console.log("calldata", e)
+    }
+
+    return openPosition(
+      depositAmount,
+      aaveCollateralAddress,
+      aaveDebtAddress,
+      targetAmount,
+      borrowAmount,
+      calldata
+    )
+  },
+    [
+      aaveCollateralAddress,
+      aaveDebtAddress,
+      deposit,
+      data
+    ]
+  )
+  console.log(data)
   // useEffect(() => {
   //   if (selectedToken && account && selectedToken && tokens[selectedToken]) {
   //     await getAmountApprovedFor(account, "", tokens[selectedToken].value);
@@ -144,6 +200,7 @@ export const FxTab: React.FC = () => {
 
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
+    onOpenPosition()
   };
 
   const onActionButtonClickedApprove = (): void => {
@@ -179,7 +236,7 @@ export const FxTab: React.FC = () => {
         <div className={styles["tradingview"]}>
           <TradingViewWidget
             symbol={selectedTVPair}
-            theme={"DARK"}
+            theme={"Dark"}
             locale="us"
             autosize={true}
             interval={"30"}
