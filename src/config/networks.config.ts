@@ -414,7 +414,6 @@ export const supportedStableCoinsEur = [
     decimals: 18,
   },
 ];
-
 export const supportedCoins = [
   {
     name: "AAVE",
@@ -542,3 +541,5 @@ export const supportedPairs: Pair[] = [
     coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
   },
 ];
+
+export const ALL_COINS = [...supportedCoins, ...supportedStableCoinsDol, ...supportedStableCoinsEur]
