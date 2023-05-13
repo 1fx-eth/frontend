@@ -5,6 +5,7 @@ import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
 import {
+  addressesAaveATokens,
   Coin,
   networks,
   supportedPairs,
@@ -18,6 +19,8 @@ import { SelectPairComponent } from "../../components/select-pair/SelectPair.com
 import Slider from "../../components/slider/Slider.component";
 import { useUserPositions } from "../../hooks/useUserPositions";
 import { PositionTable } from "../../components/position-table/positionTable.component";
+import use1inchApi from "../../hooks/use1inch";
+import { parseUnits } from "@ethersproject/units";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -89,7 +92,32 @@ export const FxTab: React.FC = () => {
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
   };
-  const positions = useUserPositions();
+  const { userPositions, getNextAddress } = useUserPositions();
+
+  const { data, setInput } = use1inchApi()
+
+  const [projectedAddress, setProjectedAddress] = useState('')
+  getNextAddress().then((address) => setProjectedAddress(address))
+
+  const [collateralAddress, debtAddress, aaveCollateralAddress, aaveDebtAddress, debtDecimals] = useMemo(() => {
+    return [
+      supportedPairs[selectedPair]?.coinCollateral.address ?? '',
+      supportedPairs[selectedPair]?.coinBorrow.address ?? '',
+      addressesAaveATokens[supportedPairs[selectedPair]?.coinCollateral.symbol ?? '']?.[137] ?? '',
+      addressesAaveATokens[supportedPairs[selectedPair]?.coinBorrow.symbol ?? '']?.[137] ?? '',
+      supportedPairs[selectedPair]?.coinBorrow.decimals
+    ]
+  }, [selectedPair])
+
+  useEffect(() => {
+    setInput({
+      collateralAddress,
+      debtAddress,
+      swapAmount: parseUnits(String(long), debtDecimals).toString(),
+      projectedAddress,
+    })
+  }, [selectedPair, long, projectedAddress]
+  )
 
   return (
     <div className={styles["fx"]}>
@@ -108,7 +136,7 @@ export const FxTab: React.FC = () => {
         <div className={styles["orders"]}>
           <h1>Orders</h1>
           <p>These are your active and historic orders</p>
-          <PositionTable slots={positions.userPositions} />
+          <PositionTable slots={userPositions} />
         </div>
       </div>
       <div className={styles["right"]}>

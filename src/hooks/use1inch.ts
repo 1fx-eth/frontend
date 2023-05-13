@@ -13,13 +13,13 @@ interface OneInchInput {
     projectedAddress: string
 }
 
-const useDebouncedApiFetch = () => {
+const use1inchApi = () => {
     const [input, setInput] = useState<OneInchInput>({ collateralAddress: '', debtAddress: '', swapAmount: '0', projectedAddress: '' });
     const [data, setData] = useState<ApiResponse | null>(null);
     const slippage = 1
     const fetchApiData = useCallback(_.debounce(async (_input:OneInchInput) => {
         try {
-            if (_input.collateralAddress) {
+            if (_input.collateralAddress && _input.projectedAddress) {
                 const response = await axios.get(
                     `https://api.1inch.io/v5.0/137/swap?fromTokenAddress=${_input.debtAddress
                     }&toTokenAddress=${_input.collateralAddress
@@ -44,4 +44,4 @@ const useDebouncedApiFetch = () => {
     return { data, setInput };
 };
 
-export default useDebouncedApiFetch;
+export default use1inchApi;
