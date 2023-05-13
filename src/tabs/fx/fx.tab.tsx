@@ -47,7 +47,7 @@ export const FxTab: React.FC = () => {
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
   const [deposit, setDeposit] = useState("0");
-  const [amountApproved, setAmountApproved] = useState(0);
+  const [amountApproved, setAmountApproved] = useState('0');
   const { account } = useWeb3React<JsonRpcProvider>();
   const { approveTokenTo, getAmountApprovedFor } = useApprove();
   const { userPositions, getNextAddress } = useUserPositions();
@@ -66,10 +66,10 @@ export const FxTab: React.FC = () => {
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
       supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
@@ -160,11 +160,12 @@ export const FxTab: React.FC = () => {
         projectedAddress &&
         tokens[selectedToken]
       ) {
-        await getAmountApprovedFor(
+        const amount = await getAmountApprovedFor(
           account,
           projectedAddress,
           tokens[selectedToken]!.value
         );
+        setAmountApproved(amount)
       }
     };
     fetchData();
@@ -231,6 +232,7 @@ export const FxTab: React.FC = () => {
     onOpenPosition();
   };
 
+  console.log("amountApproved", amountApproved)
   const onActionButtonClickedApprove = (): void => {
     if (projectedAddress) {
       console.log(
@@ -247,8 +249,7 @@ export const FxTab: React.FC = () => {
   };
 
   const renderButton = (): React.ReactNode => {
-    const approve = true;
-    if (approve) {
+    if (parseUnits(deposit, collateralDecimals).gte(amountApproved)) {
       return (
         <div
           className={styles["action"]}

@@ -18,7 +18,7 @@ interface UseApprove {
     userAddress: string,
     spenderAddress: string,
     tokenAddress: string
-  ) => Promise<number>;
+  ) => Promise<string>;
 }
 
 export const useApprove = (): UseApprove => {
@@ -40,7 +40,7 @@ export const useApprove = (): UseApprove => {
     userAddress: string,
     spenderAddress: string,
     tokenAddress: string
-  ): Promise<number> => {
+  ): Promise<string> => {
     return getAllowance(userAddress, spenderAddress, tokenAddress);
   };
 

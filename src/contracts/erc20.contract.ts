@@ -22,12 +22,12 @@ export const getAllowance = async (
   userAddress: string,
   spenderAddress: string,
   tokenAddress: string
-): Promise<number> => {
+): Promise<string> => {
   const allowance = await getErc20Contract(tokenAddress).allowance(
     userAddress,
     spenderAddress
   );
-  return convertToRelativeNumber(allowance);
+  return allowance.toString();
 };
 
 export const approve = async (
