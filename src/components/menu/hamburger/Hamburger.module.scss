@@ -4,7 +4,7 @@
 .hamburger {
   cursor: pointer;
   display: none;
-  z-index: 7;
+  z-index: 15;
 
   &:focus {
     outline: none;
@@ -53,11 +53,9 @@
         &:nth-child(1) {
           transform: rotate(45deg) translate(1.7vw, 1.4vw);
         }
-
         &:nth-child(2) {
           opacity: 0;
         }
-
         &:nth-child(3) {
           transform: rotate(-45deg) translate(1.7vw, -1.6vw);
         }

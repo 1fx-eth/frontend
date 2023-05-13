@@ -21,9 +21,8 @@
   .menu {
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
-    top: -100%;
-    // overflow: hidden;
+    height: 140vh;
+    top: -180vh;
     opacity: 1;
     position: fixed;
     left: 0px;
@@ -32,10 +31,10 @@
     backdrop-filter: blur(5px);
     padding: 10rem 0;
     width: 100vw;
-    z-index: 6;
+    z-index: 14;
 
     &.visible {
-      top: 0;
+      top: -30vh;
     }
   }
 
