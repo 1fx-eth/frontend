@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../public/assets/styles/styles.scss";
 import { MenuProvider } from "./components/menu/useMenu";
 import { AuthenticationProvider } from "./contexts/authentication.context";
+import { UserPositionsProvider } from "./hooks/useUserPositions";
 
 const getLibrary = (provider: ExternalProvider): Web3Provider => {
   const lib = new Web3Provider(provider);
@@ -25,9 +26,11 @@ root.render(
       <Web3ReactProvider getLibrary={getLibrary}>
         <MenuProvider>
           <AuthenticationProvider>
-            <ModalProvider>
-              <AppComponent />
-            </ModalProvider>
+            <UserPositionsProvider>
+              <ModalProvider>
+                <AppComponent />
+              </ModalProvider>
+            </UserPositionsProvider>
           </AuthenticationProvider>
         </MenuProvider>
       </Web3ReactProvider>

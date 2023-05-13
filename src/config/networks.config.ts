@@ -11,6 +11,7 @@ import LINK from "../../public/assets/images/svg/tokens/link.svg";
 import AAVE from "../../public/assets/images/svg/tokens/aave.svg";
 import EURS from "../../public/assets/images/svg/tokens/eurs.svg";
 import JEUR from "../../public/assets/images/svg/tokens/jeur.svg";
+import AGEUR from "../../public/assets/images/svg/tokens/ageur.svg";
 import GHST from "../../public/assets/images/svg/tokens/ghst.svg";
 import DAI from "../../public/assets/images/svg/tokens/dai.svg";
 
@@ -33,9 +34,9 @@ export interface Network {
   blockExplorerUrls: string[];
   active: boolean;
   contractAddress?: string;
-  contractFactoryAddress?: string,
-  contractLensAddress?: string,
-  contractAavePoolAddress?: string,
+  contractFactoryAddress?: string;
+  contractLensAddress?: string;
+  contractAavePoolAddress?: string;
   nativeCurrency?: NativeCoin;
   supportedStableCoinsDol?: Coin[];
   supportedCoins?: Coin[];
@@ -185,9 +186,9 @@ export const networks: Network[] = [
     chainId: 137,
     active: chainIds.indexOf(137) > 0,
     contractAddress: "0x0",
-    contractFactoryAddress: '0x648cE75895873BECBC4c9a291A28CA1EF121953B',
-    contractLensAddress: '0xAe3C2d45270791Ef8aD023D1E66d275255db0499',
-    contractAavePoolAddress: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',
+    contractFactoryAddress: "0x648cE75895873BECBC4c9a291A28CA1EF121953B",
+    contractLensAddress: "0xAe3C2d45270791Ef8aD023D1E66d275255db0499",
+    contractAavePoolAddress: "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
     blockExplorerUrls: [""],
     supportedStableCoinsDol: [
       {
@@ -396,13 +397,20 @@ export const supportedStableCoinsEur = [
     symbol: "EURS",
     address: "0xe111178a87a3bff0c8d18decba5798827539ae99",
     icon: EURS,
-    decimals: 18,
+    decimals: 2,
   },
   {
     name: "JEUR",
     symbol: "JEUR",
     address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
     icon: JEUR,
+    decimals: 18,
+  },
+  {
+    name: "AGEUR",
+    symbol: "AGEUR",
+    address: "0xE0B52e49357Fd4DAf2c15e02058DCE6BC0057db4",
+    icon: AGEUR,
     decimals: 18,
   },
 ];
@@ -503,28 +511,33 @@ export const supportedCoins = [
 
 interface Pair {
   pairName: string;
+  tvPairName: string;
   coinCollateral: Coin;
   coinBorrow: Coin;
 }
 
 export const supportedPairs: Pair[] = [
   {
+    pairName: "AGEUR:USDC",
+    tvPairName: "UNISWAP3ETH:AGEURUSDC",
+    coinCollateral: supportedStableCoinsEur.find((c) => c.symbol === "AGEUR")!,
+    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+  },
+  {
     pairName: "USDC:USDT",
+    tvPairName: "UNISWAP3POLYGON:USDCUSDT",
     coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
     coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
   },
   {
-    pairName: "USDC:JEUR",
-    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
-    coinBorrow: supportedStableCoinsEur.find((c) => c.symbol === "JEUR")!,
-  },
-  {
     pairName: "USDC:GHST",
+    tvPairName: "USDCUSDT",
     coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
     coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
   },
   {
     pairName: "USDT:GHST",
+    tvPairName: "USDCUSDT",
     coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
     coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
   },

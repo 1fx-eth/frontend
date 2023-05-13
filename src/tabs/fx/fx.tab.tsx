@@ -38,16 +38,10 @@ export const FxTab: React.FC = () => {
     if (selectedPair) {
       const pair = supportedPairs[selectedPair];
       if (pair) {
-        setSelectedTVPair(
-          `${pair.coinCollateral.symbol}${pair.coinBorrow.symbol}`
-        );
+        setSelectedTVPair(pair.tvPairName);
       }
     }
   }, [selectedPair]);
-
-  const [allowedCollateralTokens, setAllowedCollateralTokens] = useState<
-    Coin[]
-  >([]);
 
   const onTokenChange = (option: number): void => {
     setSelectedToken(option);
@@ -74,6 +68,7 @@ export const FxTab: React.FC = () => {
         coinCollateralIcon: pair.coinCollateral.icon,
         coinCollateralName: pair.coinCollateral.name,
         key: index,
+        tvPair: pair.tvPairName,
         coinBorrowIcon: pair.coinBorrow.icon,
         coinBorrowName: pair.coinBorrow.name,
         value: pair.pairName,
