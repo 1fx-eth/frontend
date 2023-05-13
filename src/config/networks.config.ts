@@ -11,6 +11,8 @@ import LINK from "../../public/assets/images/svg/tokens/link.svg";
 import AAVE from "../../public/assets/images/svg/tokens/aave.svg";
 import EURS from "../../public/assets/images/svg/tokens/eurs.svg";
 import JEUR from "../../public/assets/images/svg/tokens/jeur.svg";
+import GHST from "../../public/assets/images/svg/tokens/ghst.svg";
+import DAI from "../../public/assets/images/svg/tokens/dai.svg";
 
 export interface Coin extends NativeCoin {
   address: string;
@@ -356,28 +358,28 @@ export const supportedStableCoinsDol = [
     name: "DAI",
     symbol: "DAI",
     address: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-    icon: USDC,
+    icon: DAI,
     decimals: 18,
   },
   {
     name: "GDAI",
     symbol: "GDAI",
     address: "0x91993f2101cc758D0dEB7279d41e880F7dEFe827",
-    icon: USDC,
+    icon: DAI,
     decimals: 18,
   },
   {
     name: "GHST",
     symbol: "GHST",
     address: "0x385eeac5cb85a38a9a07a70c73e0a3271cfb54a7",
-    icon: USDC,
+    icon: GHST,
     decimals: 18,
   },
   {
     name: "VGHST",
     symbol: "VGHST",
     address: "0x51195e21BDaE8722B29919db56d95Ef51FaecA6C",
-    icon: USDC,
+    icon: GHST,
     decimals: 18,
   },
 ];
@@ -490,5 +492,34 @@ export const supportedCoins = [
     address: "0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a",
     icon: LINK,
     decimals: 18,
+  },
+];
+
+interface Pair {
+  pairName: string;
+  coinCollateral: Coin;
+  coinBorrow: Coin;
+}
+
+export const supportedPairs: Pair[] = [
+  {
+    pairName: "USDC:USDT",
+    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
+  },
+  {
+    pairName: "USDC:JEUR",
+    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+    coinBorrow: supportedStableCoinsEur.find((c) => c.symbol === "JEUR")!,
+  },
+  {
+    pairName: "USDC:GHST",
+    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
+  },
+  {
+    pairName: "USDT:GHST",
+    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
+    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
   },
 ];

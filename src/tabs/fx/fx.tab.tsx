@@ -8,17 +8,21 @@ import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
 import {
   Coin,
   networks,
+  supportedPairs,
   supportedStableCoinsDol,
 } from "../../config/networks.config";
 import { SelectComponent } from "../../components/select/Select.component";
 import { SpinnerComponent } from "../../components/spinner/Spinner.component";
 import selectStyles from "../../components/select/Select.module.scss";
+import selectPairStyles from "../../components/select-pair/SelectPair.module.scss";
+import { SelectPairComponent } from "../../components/select-pair/SelectPair.component";
 
 export const FxTab: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>(
     formatNumbersWithDotDelimiter(0)
   );
   const [selectedToken, setSelectedToken] = useState<number>(0);
+  const [selectedPair, setSelectedPair] = useState<number>(0);
   const [long, setLong] = useState(0);
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
@@ -37,6 +41,10 @@ export const FxTab: React.FC = () => {
     setSelectedToken(option);
   };
 
+  const onPairChange = (option: number): void => {
+    setSelectedPair(option);
+  };
+
   const tokens = useMemo(
     () =>
       supportedStableCoinsDol.map((token, index) => ({
@@ -44,6 +52,19 @@ export const FxTab: React.FC = () => {
         key: index,
         label: token.name,
         value: token.address,
+      })),
+    []
+  );
+
+  const pairs = useMemo(
+    () =>
+      supportedPairs.map((pair, index) => ({
+        coinCollateralIcon: pair.coinCollateral.icon,
+        coinCollateralName: pair.coinCollateral.name,
+        key: index,
+        coinBorrowIcon: pair.coinBorrow.icon,
+        coinBorrowName: pair.coinBorrow.name,
+        value: pair.pairName,
       })),
     []
   );
@@ -141,21 +162,28 @@ export const FxTab: React.FC = () => {
             className={styles["long-left"]}
             disabled={false}
           />
-          <SelectComponent
-            options={tokens}
-            onOptionChange={onTokenChange}
-            selectedValue={selectedToken}
+          <SelectPairComponent
+            options={pairs}
+            onOptionChange={onPairChange}
+            selectedValue={selectedPair}
             renderOption={(option): ReactNode => (
               <>
-                {option.icon && (
+                {option.coinCollateralIcon && (
                   <img
-                    className={selectStyles["select-option-icon"]}
-                    src={option.icon}
-                    alt={option.label || option.value}
+                    className={selectPairStyles["select-option-icon"]}
+                    src={option.coinCollateralIcon}
+                    alt={option.coinCollateralName || option.value}
                   />
                 )}
-                <span className={selectStyles["select-option-label"]}>
-                  {option.label || option.value}
+                {option.coinBorrowIcon && (
+                  <img
+                    className={selectPairStyles["select-option-icon"]}
+                    src={option.coinBorrowIcon}
+                    alt={option.coinBorrowName || option.value}
+                  />
+                )}
+                <span className={selectPairStyles["select-option-label"]}>
+                  {option.value}
                 </span>
                 <span className={styles["option-amount"]}>
                   {balances[0] && <SpinnerComponent size="small" />}

@@ -10,19 +10,19 @@ import OneDelta from "../../../public/assets/images/1delta.png";
 export const HomeTab: React.FC = () => {
   return (
     <div className={styles["home"]}>
-      <InformationSection icon={book} title="1FX" description={onefx} />
+      <InformationSection icon={book} title="1fx" description={onefx} />
       <IllustratedTextListComponent items={illustratedTextItems} />
     </div>
   );
 };
 
 const onefx =
-  "1FX by 1delta is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon";
+  "1fx by 1delta is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon";
 
 const illustratedTextItems = [
   {
     image: OneDelta,
-    title: "1FX by 1delta",
-    text: "1FX is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon",
+    title: "1fx by 1delta",
+    text: "1fx is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon",
   },
 ];

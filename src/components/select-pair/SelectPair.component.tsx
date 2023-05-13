@@ -10,41 +10,44 @@ import React, {
 
 import carret from "../../../public/assets/images/svg/carret.svg";
 
-import styles from "./Select.module.scss";
+import styles from "./SelectPair.module.scss";
 
-export interface SelectOption {
+export interface SelectPairOption {
   key?: number;
   label?: string;
   value: string;
-  icon?: string;
+  coinCollateralIcon: string;
+  coinCollateralName: string;
+  coinBorrowIcon: string;
+  coinBorrowName: string;
 }
 
-interface SelectProps {
-  options: SelectOption[];
+interface SelectPairProps {
+  options: SelectPairOption[];
   placeholder?: string;
   onOptionChange: (index: number) => void;
   selectedValue?: number;
-  renderOption?: (option: SelectOption, index: number) => ReactNode;
+  renderOption?: (option: SelectPairOption, index: number) => ReactNode;
   renderValue?: (
-    value: SelectOption,
+    value: SelectPairOption,
     index: number,
     onClick: (event?: MouseEvent<HTMLElement>) => void
   ) => ReactNode;
 }
 
-export const SelectComponent: React.FC<SelectProps> = ({
+export const SelectPairComponent: React.FC<SelectPairProps> = ({
   options,
   selectedValue,
   placeholder,
   renderOption,
   onOptionChange,
   renderValue,
-}: SelectProps) => {
+}: SelectPairProps) => {
   const controlRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const onOptionClick = useCallback(
-    (selectedOption: SelectOption) =>
+    (selectedOption: SelectPairOption) =>
       (event: MouseEvent | KeyboardEvent): void => {
         event.preventDefault();
         event.stopPropagation();
@@ -97,16 +100,23 @@ export const SelectComponent: React.FC<SelectProps> = ({
           role="button"
           onKeyDown={onSelect}
           onClick={onSelect}>
-          {options[selectedValue]?.icon && (
+          {options[selectedValue]?.coinCollateralIcon && (
             <img
               className={styles["select-value-icon"]}
-              src={options[selectedValue]?.icon}
-              alt={options[selectedValue]?.value}
+              src={options[selectedValue]?.coinCollateralIcon}
+              alt={options[selectedValue]?.coinCollateralName}
+            />
+          )}
+          {options[selectedValue]?.coinBorrowIcon && (
+            <img
+              className={styles["select-value-icon"]}
+              src={options[selectedValue]?.coinBorrowIcon}
+              alt={options[selectedValue]?.coinBorrowName}
             />
           )}
           <div>
-            {options[selectedValue]?.label ||
-              options[selectedValue]?.value ||
+            {options[selectedValue]?.value ||
+              options[selectedValue]?.label ||
               placeholder}
           </div>
           <img alt="trigger" className={styles["carret"]} src={carret} />
@@ -129,14 +139,24 @@ export const SelectComponent: React.FC<SelectProps> = ({
     return null;
   };
 
-  const renderOptionEl = (option: SelectOption, index: number): ReactNode => {
+  const renderOptionEl = (
+    option: SelectPairOption,
+    index: number
+  ): ReactNode => {
     let el: ReactNode = (
       <>
-        {option.icon && (
+        {option.coinCollateralIcon && (
           <img
             className={styles["select-option-icon"]}
-            src={option.icon}
-            alt={option.label || option.value}
+            src={option.coinCollateralIcon}
+            alt={option.coinCollateralName || option.label}
+          />
+        )}
+        {option.coinBorrowIcon && (
+          <img
+            className={styles["select-option-icon"]}
+            src={option.coinBorrowIcon}
+            alt={option.coinBorrowName || option.label}
           />
         )}
         <span className={styles["select-option-label"]}>

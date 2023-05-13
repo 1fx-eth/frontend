@@ -9,7 +9,7 @@ export const AppComponent = (): JSX.Element => {
 
   return (
     <main>
-      <HeaderComponent title="1FX" subTitle="By 1Delta" />
+      <HeaderComponent title="1fx" subTitle="by 1delta" />
       <TabContainer selectedTab={selectedTab} tabs={tabs} />
     </main>
   );
