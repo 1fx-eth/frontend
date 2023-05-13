@@ -7,7 +7,7 @@
   "scripts": {
     "contracts:compile:abi": "typechain --target ethers-v5 --out-dir src/abi/types \"./src/abi/**/*.json\"",
     "contracts:compile": "yarn contracts:compile:abi",
-    "prepare": "yarn contracts:compile && yarn i18n:compile",
+    "prepare": "yarn contracts:compile",
     "build": "yarn build:test",
     "build:test": "rm -rf dist && webpack --node-env testing",
     "build:prod": "rm -rf dist && webpack --node-env production",
