@@ -1,7 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable max-len */
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
@@ -26,7 +35,7 @@ import { useWeb3React } from "@web3-react/core";
 import use1inchApi from "../../hooks/use1inch";
 import { parseUnits } from "@ethersproject/units";
 import { useOpenPosition } from "../../hooks/useOpenPosition";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -44,6 +53,7 @@ export const FxTab: React.FC = () => {
   const { userPositions, getNextAddress } = useUserPositions();
   const { data, setInput } = use1inchApi();
   const [projectedAddress, setProjectedAddress] = useState("");
+
   const [
     collateralAddress,
     debtAddress,
@@ -56,10 +66,10 @@ export const FxTab: React.FC = () => {
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
       supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
@@ -76,11 +86,11 @@ export const FxTab: React.FC = () => {
   }, [selectedPair]);
 
   useEffect(() => {
-    let swapAmount = '0'
+    let swapAmount = "0";
     try {
-      swapAmount = parseUnits(String(long), debtDecimals).toString()
+      swapAmount = parseUnits(String(long), debtDecimals).toString();
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     setInput({
       collateralAddress,
@@ -98,59 +108,77 @@ export const FxTab: React.FC = () => {
     setInput,
   ]);
 
-  const { openPosition } = useOpenPosition()
+  const { openPosition } = useOpenPosition();
 
   const onOpenPosition = useCallback(() => {
-
-    let depositAmount = '0'
+    let depositAmount = "0";
     try {
-      depositAmount = parseUnits(String(deposit), collateralDecimals).toString()
+      depositAmount = parseUnits(
+        String(deposit),
+        collateralDecimals
+      ).toString();
     } catch (e) {
-      console.log("depositAmount", e)
+      console.log("depositAmount", e);
     }
 
-    let targetAmount = '0'
+    let targetAmount = "0";
     try {
-      targetAmount = BigNumber.from(data.toTokenAmount).mul(99).div(100).toString()
+      targetAmount = BigNumber.from(data.toTokenAmount)
+        .mul(99)
+        .div(100)
+        .toString();
     } catch (e) {
-      console.log("targetAmount", e)
+      console.log("targetAmount", e);
     }
 
-    const borrowAmount = data?.fromTokenAmount ?? '0'
+    const borrowAmount = data?.fromTokenAmount ?? "0";
 
-
-    let calldata = '0x'
+    let calldata = "0x";
 
     try {
-      calldata = data?.tx?.data
+      calldata = data?.tx?.data;
     } catch (e) {
-      console.log("calldata", e)
+      console.log("calldata", e);
     }
+    if (aaveCollateralAddress && aaveDebtAddress) {
+      return openPosition(
+        depositAmount,
+        aaveCollateralAddress,
+        aaveDebtAddress,
+        targetAmount,
+        borrowAmount,
+        calldata
+      );
+    }
+  }, [aaveCollateralAddress, aaveDebtAddress, deposit, data]);
 
-    return openPosition(
-      depositAmount,
-      aaveCollateralAddress,
-      aaveDebtAddress,
-      targetAmount,
-      borrowAmount,
-      calldata
-    )
-  },
-    [
-      aaveCollateralAddress,
-      aaveDebtAddress,
-      deposit,
-      data
-    ]
-  )
-  console.log(data)
-  // useEffect(() => {
-  //   if (selectedToken && account && selectedToken && tokens[selectedToken]) {
-  //     await getAmountApprovedFor(account, "", tokens[selectedToken].value);
-  //   }
-  // }, [account, selectedToken, getAmountApprovedFor]);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      if (
+        selectedToken &&
+        account &&
+        projectedAddress &&
+        tokens[selectedToken]
+      ) {
+        await getAmountApprovedFor(
+          account,
+          projectedAddress,
+          tokens[selectedToken]!.value
+        );
+      }
+    };
+    fetchData();
+  }, [account, selectedToken, getAmountApprovedFor, projectedAddress]);
 
-  getNextAddress().then((address) => setProjectedAddress(address));
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      if (account) {
+        const address = await getNextAddress();
+        setProjectedAddress(address);
+      }
+    };
+    fetchData();
+  }, [account, getNextAddress]);
 
   const tokens = useMemo(
     () =>
@@ -200,11 +228,22 @@ export const FxTab: React.FC = () => {
 
   const onActionButtonClicked = (): void => {
     console.log("onActionButtonClicked");
-    onOpenPosition()
+    onOpenPosition();
   };
 
   const onActionButtonClickedApprove = (): void => {
-    console.log("onActionButtonClicked");
+    if (projectedAddress) {
+      console.log(
+        "onActionButtonClicked",
+        projectedAddress,
+        tokens[selectedToken]!.value
+      );
+      approveTokenTo(
+        ethers.constants.MaxUint256.toString(),
+        projectedAddress,
+        tokens[selectedToken]!.value
+      );
+    }
   };
 
   const renderButton = (): React.ReactNode => {

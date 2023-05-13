@@ -31,12 +31,12 @@ export const getAllowance = async (
 };
 
 export const approve = async (
-  amount: number,
+  amount: string,
   spenderAddress: string,
   tokenAddress: string,
   library: JsonRpcProvider
 ): Promise<ContractTransaction> => {
   return getErc20Contract(tokenAddress)
     .connect(library.getSigner())
-    .approve(spenderAddress, convertToBigNumber(amount));
+    .approve(spenderAddress, amount);
 };

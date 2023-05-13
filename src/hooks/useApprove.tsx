@@ -10,7 +10,7 @@ import { useUserPositions } from "./useUserPositions";
 
 interface UseApprove {
   approveTokenTo: (
-    amount: number,
+    amount: string,
     spenderAddress: string,
     tokenAddress: string
   ) => void;
@@ -27,7 +27,7 @@ export const useApprove = (): UseApprove => {
   const { refresh } = useUserPositions();
 
   const approveTokenTo = (
-    amount: number,
+    amount: string,
     spenderAddress: string,
     tokenAddress: string
   ): void => {
