@@ -2,6 +2,7 @@ import { JsonRpcProvider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { SlotData, getUserSlots } from "../contracts/fx.contracts";
+import { nextAddress } from "../contracts/fx-factory.contract";
 
 export interface User {
   walletConnected: boolean;
@@ -22,11 +23,13 @@ export interface Totals {
 
 interface UserPositions {
   userPositions: SlotData[];
+  getNextAddress: () => Promise<string>;
   refresh: () => void;
 }
 
 const UserPositionsContext = React.createContext<UserPositions>({
   userPositions: [],
+  getNextAddress: () => Promise.resolve(""),
   refresh: () => {
     void 0;
   },
@@ -46,7 +49,6 @@ export const UserPositionsProvider: React.FC<UserPositionsProviderProps> = (
     if (account && library) {
       const [userSlots] = await Promise.all([getUserSlots(account)]);
       setUserPositions(userSlots);
-      console.log(userSlots);
     } else {
       setUserPositions([]);
     }
@@ -66,10 +68,15 @@ export const UserPositionsProvider: React.FC<UserPositionsProviderProps> = (
     }
   }, [account, loadUserPositions]);
 
+  const getNextAddress = (): Promise<string> => {
+    return nextAddress();
+  };
+
   return (
     <UserPositionsContext.Provider
       value={{
         userPositions: userPositions,
+        getNextAddress: getNextAddress,
         refresh,
       }}>
       {props.children}
