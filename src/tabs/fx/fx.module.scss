@@ -3,11 +3,13 @@
   display: flex;
   flex-direction: row;
   .left {
+    background-color: #131722;
     width: 75%;
     .tradingview {
       min-height: 500px;
       width: 100%;
       box-sizing: border-box;
+      background-color: #131722;
     }
     .orders {
       color: #d1d4dc;
@@ -24,11 +26,13 @@
     .buysell {
       display: flex;
       flex-direction: row;
+      height: 40px;
       .buy {
         text-align: center;
         padding: 8px;
         width: 50%;
         border: 0.1px solid transparentize(#d9dadb, 0.75);
+        border-bottom: 2px solid transparentize(#d9dadb, 0.75);
         &:hover {
           cursor: pointer;
           border: 0.1px solid transparentize(#d9dadb, 0.5);
@@ -43,6 +47,7 @@
         padding: 8px;
         width: 50%;
         border: 0.1px solid transparentize(#d9dadb, 0.75);
+        border-bottom: 2px solid transparentize(#d9dadb, 0.75);
         &:hover {
           cursor: pointer;
           border: 0.1px solid transparentize(#d9dadb, 0.5);
@@ -57,7 +62,7 @@
       display: flex;
       flex-direction: row;
       padding: 8px;
-      .collateral {
+      .collateral-amount {
         text-align: left;
         padding: 8px;
         width: 50%;
@@ -70,20 +75,119 @@
         border: 0;
       }
     }
-    .collateral-input {
+    .collateral {
+      display: flex;
+      flex-direction: row;
       background-color: #000;
+      margin-left: 8px;
+      margin-right: 8px;
+      border-radius: 8px;
       padding: 8px;
-      .collateral {
-        text-align: left;
-        padding: 8px;
-        width: 50%;
-        border: 0;
+      .collateral-left {
+        display: flex;
+        flex-direction: row;
+        width: 70%;
+        input {
+          background-color: transparent;
+          border: solid 0.1rem transparent;
+          outline: 0;
+          border: 0;
+          color: #fff;
+          padding: 4px;
+          width: calc(100% - 40px);
+        }
+        .max {
+          width: 40px;
+          background-color: #2a2b2e;
+          border-radius: 8px;
+          text-align: center;
+          vertical-align: middle;
+          padding: 6px 8px;
+          border: 0;
+          margin-right: 20px;
+          &:hover {
+            cursor: pointer;
+            color: #00bc06;
+          }
+        }
       }
-      .balance {
-        text-align: right;
-        padding: 8px;
-        width: 50%;
-        border: 0;
+      .collateral-right {
+        display: flex;
+        flex-direction: row;
+        width: 30%;
+        align-content: right;
+      }
+    }
+    .frame-overlap {
+      background-color: #0c0f12;
+      border: 1px solid;
+      border-color: #242b33;
+      border-radius: 8px;
+      height: 44px;
+      left: 12px;
+      position: absolute;
+      top: 91px;
+      width: 276px;
+      .frame-text-wrapper-8 {
+        color: #ffffff;
+        font-family: "Outfit", Helvetica;
+        font-size: 16px;
+        font-weight: 600;
+        left: 9px;
+        letter-spacing: 0;
+        line-height: 18px;
+        position: absolute;
+        top: 11px;
+        white-space: nowrap;
+      }
+
+      .frame-network-buttons {
+        align-items: center;
+        background-color: #242b33;
+        border-radius: 5px;
+        display: flex;
+        gap: 4px;
+        justify-content: flex-end;
+        left: 189px;
+        padding: 4px;
+        position: absolute;
+        top: 9px;
+        width: fit-content;
+
+        .frame-div {
+          color: #ffffff;
+          font-family: "Outfit", Helvetica;
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0;
+          line-height: 16px;
+          position: relative;
+          white-space: nowrap;
+          width: fit-content;
+        }
+      }
+      .frame-buttons-2 {
+        align-items: center;
+        background-color: #242b33;
+        border-radius: 4px;
+        display: flex;
+        gap: 4px;
+        left: 149px;
+        padding: 4px;
+        position: absolute;
+        top: 9px;
+        width: fit-content;
+        .frame-div {
+          color: #ffffff;
+          font-family: "Outfit", Helvetica;
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0;
+          line-height: 16px;
+          position: relative;
+          white-space: nowrap;
+          width: fit-content;
+        }
       }
     }
   }

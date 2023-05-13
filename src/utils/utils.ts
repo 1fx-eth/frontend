@@ -19,3 +19,7 @@ export const uuidv4 = (): string => {
     return v.toString(16);
   });
 };
+
+export const round = (x: number, decimals = 2): number =>
+  Math.round((x + Number.EPSILON) * Math.pow(10, decimals)) /
+  Math.pow(10, decimals);
