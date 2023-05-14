@@ -3,7 +3,7 @@ import React from "react";
 import { IllustratedTextListComponent } from "../../components/illustrated-text-list/IllustratedTextList.component";
 import { InformationSection } from "../../components/information/information.section";
 
-import book from "../../../public/assets/images/svg/book.svg";
+import gauge from "../../../public/assets/images/svg/gauge.svg";
 import styles from "./home.module.scss";
 import Fees from "../../../public/assets/images/fees.jpg";
 import Leverage from "../../../public/assets/images/leverage.jpg";
@@ -12,7 +12,11 @@ import Abstract from "../../../public/assets/images/abstract.jpg";
 export const HomeTab: React.FC = () => {
   return (
     <div className={styles["home"]}>
-      <InformationSection icon={book} title="1fx" description={onefx} />
+      <InformationSection
+        icon={gauge}
+        title="DeFi trading with high leverage."
+        description={onefx}
+      />
       <IllustratedTextListComponent items={illustratedTextItems} />
     </div>
   );

@@ -30,7 +30,7 @@ export const tabs: Tab[] = [
   {
     index: 2,
     key: TabKeys.FX,
-    title: "Staking",
+    title: "Trade",
     icon: USDT,
     component: <FxTab />,
   },

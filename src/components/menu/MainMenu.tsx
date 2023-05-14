@@ -17,7 +17,7 @@ export const mainMenu: MenuItem[] = [
   },
   {
     index: 2,
-    title: "FX",
+    title: "Trade",
     icon: false,
     disabled: false,
     needsWeb3: false,

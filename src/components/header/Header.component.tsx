@@ -42,7 +42,6 @@ export const HeaderComponent: FunctionComponent<HeaderProps> = (
         </div>
         <div className={styles["header-title"]}>
           <div className={styles["main-title"]}>{props.title}</div>
-          <div className={styles["sub-title"]}>{props.subTitle}</div>
         </div>
         <MenuComponent />
       </div>
