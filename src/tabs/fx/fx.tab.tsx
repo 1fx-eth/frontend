@@ -43,11 +43,11 @@ export const FxTab: React.FC = () => {
   const [selectedTVPair, setSelectedTVPair] = useState<string>("USDCUSDT");
   const [long, setLong] = useState(0);
   const [leverage, setLeverage] = useState(1);
-  const [maxLeverage, setMaxLeverage] = useState(10);
+  const [maxLeverage, setMaxLeverage] = useState(20);
   const [balance, setBalance] = useState(0);
   const [balances, setBalances] = useState<number[]>([]);
   const [deposit, setDeposit] = useState("0");
-  const [amountApproved, setAmountApproved] = useState('0');
+  const [amountApproved, setAmountApproved] = useState("0");
   const { account } = useWeb3React<JsonRpcProvider>();
   const { approveTokenTo, getAmountApprovedFor } = useApprove();
   const { userPositions, getNextAddress } = useUserPositions();
@@ -66,10 +66,10 @@ export const FxTab: React.FC = () => {
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
       supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
@@ -165,7 +165,7 @@ export const FxTab: React.FC = () => {
           projectedAddress,
           tokens[selectedToken]!.value
         );
-        setAmountApproved(amount)
+        setAmountApproved(amount);
       }
     };
     fetchData();
@@ -232,7 +232,7 @@ export const FxTab: React.FC = () => {
     onOpenPosition();
   };
 
-  console.log("amountApproved", amountApproved)
+  console.log("amountApproved", amountApproved);
   const onActionButtonClickedApprove = (): void => {
     if (projectedAddress) {
       console.log(
