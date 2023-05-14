@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-len */
@@ -61,6 +62,20 @@ const PositionRow = ({ slot }: RowProps) => {
     });
   };
 
+  const onClosePosition = () => {
+    console.log("close position");
+  };
+
+  const onClickLink = (address: string) => {
+    window.open(
+      "https://polygonscan.com/address/" + address + "#code",
+      "_blank"
+    );
+  };
+
+  const linkSvg =
+    "M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z";
+
   return (
     <tr className={styles["row"]}>
       <td className={styles["column"]}>
@@ -69,11 +84,26 @@ const PositionRow = ({ slot }: RowProps) => {
           <span>{symbolCollat}</span>
           <img src={imgDebt} alt="2" />
           <span>{symbolDebt}</span>
+          <svg
+            width="16"
+            height="16"
+            viewBox={`0 0 512 512`}
+            onClick={() => onClickLink(slot.slot)}
+            className={styles["link"]}>
+            <path d={linkSvg} fill="#0caf48" />
+          </svg>
         </div>
       </td>
       <td>{getPnl()}</td>
       <td>{leverage}x</td>
       <td>${nav}</td>
+      <td className={styles["column"]}>
+        <div className={styles["close"]}>
+          <span onClick={onClosePosition} onKeyDown={onClosePosition}>
+            Close
+          </span>
+        </div>
+      </td>
     </tr>
   );
 };
@@ -84,7 +114,8 @@ const PositinHeader = () => {
       <td>Pair</td>
       <td>PNL</td>
       <td>Leverage</td>
-      <td>Position Sizes</td>
+      <td>Position Size</td>
+      <td></td>
     </thead>
   );
 };
