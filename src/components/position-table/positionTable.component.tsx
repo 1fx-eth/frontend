@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable max-len */
+import { formatEther } from "@ethersproject/units";
 import React, { useMemo } from "react";
 import { ALL_COINS } from "../../config/networks.config";
 import { SlotData } from "../../contracts/fx.contracts";
@@ -27,7 +28,7 @@ interface RowProps {
 }
 
 const PositionRow = ({ slot }: RowProps) => {
-  const [debt, collateral, nav, leverage] = useMemo(() => {
+  const [debt, collateral, nav, leverage, hf] = useMemo(() => {
     const collateral = Number(slot.totalCollateralBase);
     const debt = Number(slot.totalDebtBase);
     let nav = collateral - debt;
@@ -38,6 +39,7 @@ const PositionRow = ({ slot }: RowProps) => {
       collateral.toLocaleString(),
       nav.toLocaleString(),
       leverage.toLocaleString(undefined, { minimumFractionDigits: 2 }),
+      Number(formatEther(slot.healthFactor)).toLocaleString(undefined, { minimumFractionDigits: 2 }),
     ];
   }, [slot]);
 
@@ -102,6 +104,7 @@ const PositionRow = ({ slot }: RowProps) => {
         </td>
       <td>{leverage}x</td>
       <td>${nav}</td>
+      <td>{hf}</td>
       <td className={styles["column"]}>
         <div className={styles["close"]}>
           <span onClick={onClosePosition} onKeyDown={onClosePosition}>
@@ -120,6 +123,7 @@ const PositinHeader = () => {
       <td>PNL</td>
       <td>Leverage</td>
       <td>Position Size</td>
+      <td>Health Factor</td>
       <td></td>
     </thead>
   );
