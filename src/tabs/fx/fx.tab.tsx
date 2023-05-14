@@ -16,6 +16,7 @@ import TradingViewWidget from "react-tradingview-widget";
 import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
 import {
   addressesAaveATokens,
+  ALL_COINS,
   Coin,
   networks,
   supportedPairs,
@@ -33,9 +34,10 @@ import { useApprove } from "../../hooks/useApprove";
 import { JsonRpcProvider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import use1inchApi from "../../hooks/use1inch";
-import { parseUnits } from "@ethersproject/units";
+import { formatEther, parseUnits } from "@ethersproject/units";
 import { useOpenPosition } from "../../hooks/useOpenPosition";
 import { BigNumber, ethers } from "ethers";
+import { getBalance } from "../../contracts/erc20.contract";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -44,7 +46,7 @@ export const FxTab: React.FC = () => {
   const [long, setLong] = useState(0);
   const [leverage, setLeverage] = useState(1);
   const [maxLeverage, setMaxLeverage] = useState(20);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState('0');
   const [balances, setBalances] = useState<number[]>([]);
   const [deposit, setDeposit] = useState("0");
   const [amountApproved, setAmountApproved] = useState("0");
@@ -53,6 +55,17 @@ export const FxTab: React.FC = () => {
   const { userPositions, getNextAddress } = useUserPositions();
   const { data, setInput } = use1inchApi();
   const [projectedAddress, setProjectedAddress] = useState("");
+
+  const tokens = useMemo(
+    () =>
+      supportedStableCoinsDol.map((token, index) => ({
+        icon: token.icon,
+        key: index,
+        label: token.name,
+        value: token.address,
+      })),
+    []
+  );
 
   const [
     collateralAddress,
@@ -66,15 +79,42 @@ export const FxTab: React.FC = () => {
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
       supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
     ];
   }, [selectedPair]);
+
+  const selectedCoin = useMemo(() =>
+    ALL_COINS.find(x => x?.name === tokens?.[selectedToken]?.label),
+    [
+      selectedToken
+    ]
+  )
+
+  useEffect(() => {
+    const fetchBalance = async (): Promise<string> => {
+      if (account && selectedCoin?.address) {
+        try {
+          const balance = await getBalance(account, selectedCoin.address)
+          const valBalance = Number(
+            formatEther(balance.mul(BigNumber.from(10).pow(18 - Number(collateralDecimals))))
+          ).toLocaleString(undefined, { maximumFractionDigits: 2 })
+          setBalance(valBalance)
+        } catch (e) {
+          console.log("error fetching balance:", e)
+        }
+      }
+      return '0'
+    }
+
+    fetchBalance()
+  }, [selectedCoin, account]
+  )
 
   useEffect(() => {
     const pair = supportedPairs[selectedPair];
@@ -179,16 +219,7 @@ export const FxTab: React.FC = () => {
     fetchData();
   }, [account, getNextAddress]);
 
-  const tokens = useMemo(
-    () =>
-      supportedStableCoinsDol.map((token, index) => ({
-        icon: token.icon,
-        key: index,
-        label: token.name,
-        value: token.address,
-      })),
-    []
-  );
+
 
   const pairs = useMemo(
     () =>
@@ -230,7 +261,7 @@ export const FxTab: React.FC = () => {
     onOpenPosition();
   };
 
-  console.log("amountApproved", amountApproved);
+
   const onActionButtonClickedApprove = (): void => {
     if (projectedAddress) {
       console.log(

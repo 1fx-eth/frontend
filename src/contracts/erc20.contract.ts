@@ -3,7 +3,7 @@ import { convertToRelativeNumber, getContract } from "../utils/blockchain";
 import erc20abi from "../abi/erc20.json";
 
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { ContractTransaction } from "ethers";
+import { BigNumber, ContractTransaction } from "ethers";
 import { Erc20 } from "../abi/types/Erc20";
 
 const getErc20Contract = (contractAddress: string): Erc20 => {
@@ -13,9 +13,9 @@ const getErc20Contract = (contractAddress: string): Erc20 => {
 export const getBalance = async (
   userAddress: string,
   tokenAddress: string
-): Promise<number> => {
+): Promise<BigNumber> => {
   const balance = await getErc20Contract(tokenAddress).balanceOf(userAddress);
-  return convertToRelativeNumber(balance);
+  return balance;
 };
 
 export const getAllowance = async (
@@ -29,6 +29,7 @@ export const getAllowance = async (
   );
   return allowance.toString();
 };
+
 
 export const approve = async (
   amount: string,
