@@ -285,57 +285,100 @@ export const FxTab: React.FC = () => {
           />
         </div>
         <div className={styles["orders"]}>
-          <h1>Orders</h1>
-          <p>These are your active and historic orders</p>
           <PositionTable slots={userPositions} />
         </div>
       </div>
       <div className={styles["right"]}>
-        <div className={styles["buysell"]}>
-          <div className={styles["buy"]}>Buy/Long</div>
-          <div className={styles["sell"]}>Sell/Short</div>
-        </div>
-        <div className={styles["collateral-balance"]}>
-          <div className={styles["collateral-amount"]}>
-            Pay: ${(Number(deposit) * 0.9998).toLocaleString()}
+        <div className={styles["panel"]}>
+          <div className={styles["buysell"]}>
+            <div className={styles["buy"]}>Buy/Long</div>
+            <div className={styles["sell"]}>Sell/Short</div>
           </div>
-          <div className={styles["balance"]}>Balance: {balance}</div>
-        </div>
-        <div className={styles["collateral"]}>
-          <div className={styles["collateral-left"]}>
+          <div className={styles["collateral-balance"]}>
+            <div className={styles["collateral-amount"]}>
+              Pay: ${(Number(deposit) * 0.9998).toLocaleString()}
+            </div>
+            <div className={styles["balance"]}>Balance: {balance}</div>
+          </div>
+          <div className={styles["collateral"]}>
+            <div className={styles["collateral-left"]}>
+              <input
+                onChange={onDepositChange}
+                type="text"
+                value={deposit}
+                disabled={false}
+                inputMode="decimal"
+                autoComplete="off"
+                autoCorrect="off"
+                // text-specific options
+                pattern="^[0-9]*[.,]?[0-9]*$"
+                placeholder={"0.0"}
+                minLength={1}
+                maxLength={79}
+                spellCheck="false"
+              />
+              <div className={styles["max"]}>MAX</div>
+            </div>
+            <div className={styles["collateral-right"]}>
+              <SelectComponent
+                options={tokens}
+                onOptionChange={onTokenChange}
+                selectedValue={selectedToken}
+                renderOption={(option): ReactNode => (
+                  <>
+                    {option.icon && (
+                      <img
+                        className={selectStyles["select-option-icon"]}
+                        src={option.icon}
+                        alt={option.label || option.value}
+                      />
+                    )}
+                    <span className={selectStyles["select-option-label"]}>
+                      {option.label || option.value}
+                    </span>
+                    <span className={styles["option-amount"]}>
+                      {balances[0] && <SpinnerComponent size="small" />}
+                      {balances[0] &&
+                        formatNumbersWithDotDelimiter(
+                          0 //round(balances?.[option.value]?.amount || 0)
+                        )}
+                    </span>
+                  </>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className={styles["long-label"]}>Long: ${long}</div>
+          <div className={styles["long"]}>
             <input
-              onChange={onDepositChange}
-              type="text"
-              value={deposit}
+              type="string"
+              value={long}
+              className={styles["long-left"]}
               disabled={false}
-              inputMode="decimal"
-              autoComplete="off"
-              autoCorrect="off"
-              // text-specific options
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              placeholder={"0.0"}
-              minLength={1}
-              maxLength={79}
-              spellCheck="false"
             />
-            <div className={styles["max"]}>MAX</div>
-          </div>
-          <div className={styles["collateral-right"]}>
-            <SelectComponent
-              options={tokens}
-              onOptionChange={onTokenChange}
-              selectedValue={selectedToken}
+            <SelectPairComponent
+              options={pairs}
+              onOptionChange={onPairChange}
+              selectedValue={selectedPair}
               renderOption={(option): ReactNode => (
                 <>
-                  {option.icon && (
+                  {option.coinCollateralIcon && (
                     <img
-                      className={selectStyles["select-option-icon"]}
-                      src={option.icon}
-                      alt={option.label || option.value}
+                      className={selectPairStyles["select-option-icon"]}
+                      src={option.coinCollateralIcon}
+                      alt={option.coinCollateralName || option.value}
                     />
                   )}
-                  <span className={selectStyles["select-option-label"]}>
-                    {option.label || option.value}
+                  {option.coinBorrowIcon && (
+                    <img
+                      className={selectPairStyles["select-option-icon"]}
+                      src={option.coinBorrowIcon}
+                      alt={option.coinBorrowName || option.value}
+                    />
+                  )}
+                  <span className={selectPairStyles["select-option-label"]}>
+                    {option.value}
                   </span>
                   <span className={styles["option-amount"]}>
                     {balances[0] && <SpinnerComponent size="small" />}
@@ -348,69 +391,27 @@ export const FxTab: React.FC = () => {
               )}
             />
           </div>
-        </div>
-
-        <div className={styles["long-label"]}>Long: ${long}</div>
-        <div className={styles["long"]}>
-          <input
-            type="string"
-            value={long}
-            className={styles["long-left"]}
-            disabled={false}
-          />
-          <SelectPairComponent
-            options={pairs}
-            onOptionChange={onPairChange}
-            selectedValue={selectedPair}
-            renderOption={(option): ReactNode => (
-              <>
-                {option.coinCollateralIcon && (
-                  <img
-                    className={selectPairStyles["select-option-icon"]}
-                    src={option.coinCollateralIcon}
-                    alt={option.coinCollateralName || option.value}
-                  />
-                )}
-                {option.coinBorrowIcon && (
-                  <img
-                    className={selectPairStyles["select-option-icon"]}
-                    src={option.coinBorrowIcon}
-                    alt={option.coinBorrowName || option.value}
-                  />
-                )}
-                <span className={selectPairStyles["select-option-label"]}>
-                  {option.value}
-                </span>
-                <span className={styles["option-amount"]}>
-                  {balances[0] && <SpinnerComponent size="small" />}
-                  {balances[0] &&
-                    formatNumbersWithDotDelimiter(
-                      0 //round(balances?.[option.value]?.amount || 0)
-                    )}
-                </span>
-              </>
-            )}
-          />
-        </div>
-        <div className={styles["leverage-label"]}>Leverage:</div>
-        <div className={styles["leverage"]}>
-          <div className={styles["leverage-input"]}>
-            <input
-              // onChange={onLeverageValueChange}
-              type="string"
-              value={leverage}
-              disabled={false}
-            />
+          <div className={styles["leverage-label"]}>Leverage:</div>
+          <div className={styles["leverage"]}>
+            <div className={styles["leverage-input"]}>
+              <input
+                // onChange={onLeverageValueChange}
+                type="string"
+                value={leverage}
+                disabled={false}
+              />
+            </div>
+            <div className={styles["leverage-slider"]}>
+              <Slider
+                max={maxLeverage}
+                currentValue={leverage}
+                onChange={(value): void => onLeverageChange(value)}
+              />
+            </div>
           </div>
-          <div className={styles["leverage-slider"]}>
-            <Slider
-              max={maxLeverage}
-              currentValue={leverage}
-              onChange={(value): void => onLeverageChange(value)}
-            />
-          </div>
+          {renderButton()}
         </div>
-        {renderButton()}
+        {/* <div className={styles["bottom-right"]}></div> */}
       </div>
     </div>
   );

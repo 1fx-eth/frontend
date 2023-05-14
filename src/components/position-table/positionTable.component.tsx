@@ -4,13 +4,15 @@
 import React, { useMemo } from "react";
 import { ALL_COINS } from "../../config/networks.config";
 import { SlotData } from "../../contracts/fx.contracts";
+import styles from "./positionTable.module.scss";
 
 interface TableProps {
   slots: SlotData[];
 }
+
 export const PositionTable = ({ slots }: TableProps) => {
   return (
-    <table>
+    <table className={styles["positions"]}>
       {PositinHeader()}
       {slots.map((s) => (
         <PositionRow slot={s} key={s.slot} />
@@ -52,29 +54,24 @@ const PositionRow = ({ slot }: RowProps) => {
       debtSlot?.symbol,
     ];
   }, [slot]);
+
+  const getPnl = (): string => {
+    return (Math.random() / 50 - 0.01).toLocaleString(undefined, {
+      maximumFractionDigits: 4,
+    });
+  };
+
   return (
-    <tr>
-      <td>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}>
-          <img
-            src={imgCollat}
-            alt="1"
-            style={{ width: "20px", height: "100%" }}
-          />
-          -
-          <img
-            src={imgDebt}
-            alt="2"
-            style={{ width: "20px", height: "100%" }}
-          />
+    <tr className={styles["row"]}>
+      <td className={styles["column"]}>
+        <div className={styles["pair"]}>
+          <img src={imgCollat} alt="1" />
+          <span>{symbolCollat}</span>
+          <img src={imgDebt} alt="2" />
+          <span>{symbolDebt}</span>
         </div>
-        {symbolCollat}-{symbolDebt}
       </td>
+      <td>{getPnl()}</td>
       <td>{leverage}x</td>
       <td>${nav}</td>
     </tr>
@@ -83,8 +80,9 @@ const PositionRow = ({ slot }: RowProps) => {
 
 const PositinHeader = () => {
   return (
-    <thead>
+    <thead className={styles["header"]}>
       <td>Pair</td>
+      <td>PNL</td>
       <td>Leverage</td>
       <td>Position Sizes</td>
     </thead>
