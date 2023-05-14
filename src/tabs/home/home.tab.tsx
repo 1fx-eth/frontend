@@ -5,7 +5,9 @@ import { InformationSection } from "../../components/information/information.sec
 
 import book from "../../../public/assets/images/svg/book.svg";
 import styles from "./home.module.scss";
-import OneDelta from "../../../public/assets/images/1delta.png";
+import Fees from "../../../public/assets/images/fees.jpg";
+import Leverage from "../../../public/assets/images/leverage.jpg";
+import Abstract from "../../../public/assets/images/abstract.jpg";
 
 export const HomeTab: React.FC = () => {
   return (
@@ -21,17 +23,17 @@ const onefx =
 
 const illustratedTextItems = [
   {
-    image: OneDelta,
+    image: Leverage,
     title: "High Leverage",
     text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
   },
   {
-    image: OneDelta,
+    image: Abstract,
     title: "Abstract Accounts",
     text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
   },
   {
-    image: OneDelta,
+    image: Fees,
     title: "Low Fees",
     text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
   },
