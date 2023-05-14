@@ -19,7 +19,7 @@
 
   .modal-background {
     position: absolute;
-    min-width: 640;
+    min-width: 740px;
     z-index: -2;
 
     @media all and (max-width: $mobile-small) {
@@ -41,6 +41,7 @@
         }
       }
     }
+
     .glow {
       position: absolute;
       box-shadow: 0 0 16px $gold-semi-transparent;

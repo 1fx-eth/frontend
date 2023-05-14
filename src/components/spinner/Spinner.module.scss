@@ -11,8 +11,8 @@
 .loader.simple-circle {
   animation: 2s circle-loader infinite linear;
   border: 0.4rem solid $soap;
-  border-right-color: $main-lightest;
-  border-bottom-color: $main-lightest;
+  border-right-color: $main-lightish;
+  border-bottom-color: $main-lightish;
   transform-origin: center center;
 }
 

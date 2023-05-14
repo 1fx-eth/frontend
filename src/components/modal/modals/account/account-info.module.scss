@@ -3,7 +3,7 @@
 @import "../../../../../public/assets/styles/_variables/_sizes";
 
 .account-info {
-  width: 600px;
+  min-width: 600px;
   padding: 0rem 4.2rem 0.8rem 4.2rem;
   display: flex;
   justify-content: center;

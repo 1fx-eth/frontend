@@ -17,12 +17,22 @@ export const HomeTab: React.FC = () => {
 };
 
 const onefx =
-  "1fx by 1delta is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon";
+  "1fx by 1delta is a forex margin trading module on the 1delta protocol making use of Aave, 1inch, abstract accounts and is deployed on Polygon.";
 
 const illustratedTextItems = [
   {
     image: OneDelta,
-    title: "1fx by 1delta",
-    text: "1fx is a forex trading module on the 1delta protocol making use of Aave, 1inch, Abstract accounts and is deployed on Polygon",
+    title: "High Leverage",
+    text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
+  },
+  {
+    image: OneDelta,
+    title: "Abstract Accounts",
+    text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
+  },
+  {
+    image: OneDelta,
+    title: "Low Fees",
+    text: "In order to facilitate users maintaining multiple, isolated leveraged positions simultaneously, we employ abstract accounts that hold user balances. This not only streamlines user experience but also automates the deposit-borrow-swap-supply flow in lending protocols such as AAVE.",
   },
 ];

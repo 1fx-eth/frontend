@@ -77,11 +77,9 @@ export const FxTab: React.FC = () => {
   }, [selectedPair]);
 
   useEffect(() => {
-    if (selectedPair) {
-      const pair = supportedPairs[selectedPair];
-      if (pair) {
-        setSelectedTVPair(pair.tvPairName);
-      }
+    const pair = supportedPairs[selectedPair];
+    if (pair) {
+      setSelectedTVPair(pair.tvPairName);
     }
   }, [selectedPair]);
 
