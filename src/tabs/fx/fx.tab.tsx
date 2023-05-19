@@ -13,15 +13,7 @@ import React, {
 } from "react";
 import styles from "./fx.module.scss";
 import TradingViewWidget from "react-tradingview-widget";
-import { formatNumbersWithDotDelimiter, round } from "../../utils/utils";
-import {
-  addressesAaveATokens,
-  ALL_COINS,
-  Coin,
-  networks,
-  supportedPairs,
-  supportedStableCoinsDol,
-} from "../../config/networks.config";
+import { formatNumbersWithDotDelimiter } from "../../utils/utils";
 import { SelectComponent } from "../../components/select/Select.component";
 import { SpinnerComponent } from "../../components/spinner/Spinner.component";
 import selectStyles from "../../components/select/Select.module.scss";
@@ -38,6 +30,12 @@ import { formatEther, parseUnits } from "@ethersproject/units";
 import { useOpenPosition } from "../../hooks/useOpenPosition";
 import { BigNumber, ethers } from "ethers";
 import { getBalance } from "../../contracts/erc20.contract";
+import {
+  ALL_COINS,
+  addressesAaveATokens,
+  supportedPairs,
+  supportedStableCoinsDol,
+} from "../../config/coins.config";
 
 export const FxTab: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<number>(0);
@@ -46,7 +44,7 @@ export const FxTab: React.FC = () => {
   const [long, setLong] = useState(0);
   const [leverage, setLeverage] = useState(1);
   const [maxLeverage, setMaxLeverage] = useState(20);
-  const [balance, setBalance] = useState('0');
+  const [balance, setBalance] = useState("0");
   const [balances, setBalances] = useState<number[]>([]);
   const [deposit, setDeposit] = useState("0");
   const [amountApproved, setAmountApproved] = useState("0");
@@ -79,42 +77,43 @@ export const FxTab: React.FC = () => {
       supportedPairs[selectedPair]?.coinCollateral.address ?? "",
       supportedPairs[selectedPair]?.coinBorrow.address ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
+        supportedPairs[selectedPair]?.coinCollateral.symbol ?? ""
       ]?.[137] ?? "",
       addressesAaveATokens[
-      supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
+        supportedPairs[selectedPair]?.coinBorrow.symbol ?? ""
       ]?.[137] ?? "",
       supportedPairs[selectedPair]?.coinCollateral.decimals,
       supportedPairs[selectedPair]?.coinBorrow.decimals,
     ];
   }, [selectedPair]);
 
-  const selectedCoin = useMemo(() =>
-    ALL_COINS.find(x => x?.name === tokens?.[selectedToken]?.label),
-    [
-      selectedToken
-    ]
-  )
+  const selectedCoin = useMemo(
+    () => ALL_COINS.find((x) => x?.name === tokens?.[selectedToken]?.label),
+    [selectedToken]
+  );
 
   useEffect(() => {
     const fetchBalance = async (): Promise<string> => {
       if (account && selectedCoin?.address) {
         try {
-          const balance = await getBalance(account, selectedCoin.address)
+          const balance = await getBalance(account, selectedCoin.address);
           const valBalance = Number(
-            formatEther(balance.mul(BigNumber.from(10).pow(18 - Number(collateralDecimals))))
-          ).toLocaleString(undefined, { maximumFractionDigits: 2 })
-          setBalance(valBalance)
+            formatEther(
+              balance.mul(
+                BigNumber.from(10).pow(18 - Number(collateralDecimals))
+              )
+            )
+          ).toLocaleString(undefined, { maximumFractionDigits: 2 });
+          setBalance(valBalance);
         } catch (e) {
-          console.log("error fetching balance:", e)
+          console.log("error fetching balance:", e);
         }
       }
-      return '0'
-    }
+      return "0";
+    };
 
-    fetchBalance()
-  }, [selectedCoin, account]
-  )
+    fetchBalance();
+  }, [selectedCoin, account]);
 
   useEffect(() => {
     const pair = supportedPairs[selectedPair];
@@ -219,8 +218,6 @@ export const FxTab: React.FC = () => {
     fetchData();
   }, [account, getNextAddress]);
 
-
-
   const pairs = useMemo(
     () =>
       supportedPairs.map((pair, index) => ({
@@ -257,18 +254,11 @@ export const FxTab: React.FC = () => {
   };
 
   const onActionButtonClicked = (): void => {
-    console.log("onActionButtonClicked");
     onOpenPosition();
   };
 
-
   const onActionButtonClickedApprove = (): void => {
     if (projectedAddress) {
-      console.log(
-        "onActionButtonClicked",
-        projectedAddress,
-        tokens[selectedToken]!.value
-      );
       approveTokenTo(
         ethers.constants.MaxUint256.toString(),
         projectedAddress,
@@ -440,7 +430,6 @@ export const FxTab: React.FC = () => {
           </div>
           {renderButton()}
         </div>
-        {/* <div className={styles["bottom-right"]}></div> */}
       </div>
     </div>
   );
