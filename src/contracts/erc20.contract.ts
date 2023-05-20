@@ -1,5 +1,4 @@
-import { convertToBigNumber } from "../utils/blockchain";
-import { convertToRelativeNumber, getContract } from "../utils/blockchain";
+import { getContract } from "../utils/blockchain";
 import erc20abi from "../abi/erc20.json";
 
 import { JsonRpcProvider } from "@ethersproject/providers";
@@ -29,7 +28,6 @@ export const getAllowance = async (
   );
   return allowance.toString();
 };
-
 
 export const approve = async (
   amount: string,

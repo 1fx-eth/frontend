@@ -10,7 +10,7 @@ import GHST from "../../public/assets/images/svg/tokens/ghst.svg";
 import DAI from "../../public/assets/images/svg/tokens/dai.svg";
 import { Coin } from "./networks.config";
 
-export const supportedStableCoinsDol = [
+export const SUPPORTED_STABLES_DOLLAR = [
   {
     name: "USDT",
     symbol: "USDT",
@@ -55,7 +55,7 @@ export const supportedStableCoinsDol = [
   },
 ];
 
-export const supportedStableCoinsEur = [
+export const SUPPORTED_STABLES_EURO = [
   {
     name: "EURS",
     symbol: "EURS",
@@ -78,7 +78,7 @@ export const supportedStableCoinsEur = [
     decimals: 18,
   },
 ];
-export const supportedCoins = [
+export const SUPPORTED_COINS = [
   {
     name: "AAVE",
     symbol: "AAVE",
@@ -179,41 +179,41 @@ interface Pair {
   coinBorrow: Coin;
 }
 
-export const supportedPairs: Pair[] = [
+export const SUPPORTED_PAIRS: Pair[] = [
   {
     pairName: "USDC:EURS",
     tvPairName: "CRYPTO:EURSUSD",
-    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
-    coinBorrow: supportedStableCoinsEur.find((c) => c.symbol === "EURS")!,
+    coinCollateral: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "USDC")!,
+    coinBorrow: SUPPORTED_STABLES_EURO.find((c) => c.symbol === "EURS")!,
   },
   {
     pairName: "AGEUR:USDC",
     tvPairName: "UNISWAP3ETH:AGEURUSDC",
-    coinCollateral: supportedStableCoinsEur.find((c) => c.symbol === "AGEUR")!,
-    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
+    coinCollateral: SUPPORTED_STABLES_EURO.find((c) => c.symbol === "AGEUR")!,
+    coinBorrow: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "USDC")!,
   },
   {
     pairName: "USDC:USDT",
     tvPairName: "UNISWAP3POLYGON:USDCUSDT",
-    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDC")!,
-    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
+    coinCollateral: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "USDC")!,
+    coinBorrow: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "USDT")!,
   },
 
   {
     pairName: "USDT:GHST",
     tvPairName: "USDCUSDT",
-    coinCollateral: supportedStableCoinsDol.find((c) => c.symbol === "USDT")!,
-    coinBorrow: supportedStableCoinsDol.find((c) => c.symbol === "GHST")!,
+    coinCollateral: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "USDT")!,
+    coinBorrow: SUPPORTED_STABLES_DOLLAR.find((c) => c.symbol === "GHST")!,
   },
 ];
 
 export const ALL_COINS = [
-  ...supportedCoins,
-  ...supportedStableCoinsDol,
-  ...supportedStableCoinsEur,
+  ...SUPPORTED_COINS,
+  ...SUPPORTED_STABLES_DOLLAR,
+  ...SUPPORTED_STABLES_EURO,
 ];
 
-export const addressesAaveATokens: {
+export const ADDRESSES_AAVE_A_TOKENS: {
   [asset: string]: { [chainId: number]: string };
 } = {
   AAVE: {
@@ -299,7 +299,7 @@ export const addressesAaveATokens: {
   },
 };
 
-export const addressesAaveVTokens = {
+export const ADDRESSES_AAVE_V_TOKENS = {
   AAVE: {
     5: "0xCB62E1d181179d1D86D3877e221D1EdE0bDD8841",
     80001: "0xe4Fd5bEe63f91e784da0C1f7C1Dc243305f65bBd",

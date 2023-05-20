@@ -49,8 +49,11 @@ export const getProvider = (chainId: number): providers.Provider => {
   return new providers.JsonRpcProvider(getNetwork(chainId).rpc);
 };
 
-export const convertToRelativeNumber = (number: BigNumber): number => {
-  return Number(utils.formatUnits(number, 18));
+export const bigNumberToNumber = (
+  number: BigNumber,
+  decimals: number
+): number => {
+  return Number(utils.formatUnits(number, decimals));
 };
 
 export const convertToBigNumber = (number: number): BigNumber => {
